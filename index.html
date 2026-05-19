@@ -3,1176 +3,1024 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>严小军 - 个人网站</title>
+    <title>严小军 - 个人简历</title>
     <style>
-        /* ==================== CSS Reset & Base ==================== */
+        :root {
+            --primary: #00d4ff;
+            --primary-dark: #0099cc;
+            --accent: #7b68ee;
+            --bg: transparent;
+            --card-bg: rgba(15, 20, 35, 0.75);
+            --card-hover: rgba(20, 28, 50, 0.85);
+            --text: #e8ecf0;
+            --text-light: #8899aa;
+            --border: rgba(0, 212, 255, 0.15);
+            --shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
-            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            color: #e0e0e0;
-            background: #0a0a1a;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #0a0a2e;
+            color: var(--text);
+            line-height: 1.7;
             overflow-x: hidden;
-            line-height: 1.8;
         }
 
-        /* ==================== Anime Background Canvas ==================== */
-        #anime-bg-canvas {
+        /* Anime Background Canvas */
+        #anime-bg {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: -2;
         }
-        #video-overlay {
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Theme Button */
+        .theme-toggle {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            background: rgba(10, 10, 26, 0.55);
-            transition: background 0.8s ease;
-        }
-
-        /* ==================== Loading Screen ==================== */
-        #loading-screen {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: #0a0a1a;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            z-index: 10000;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-        }
-        #loading-screen.hidden { opacity: 0; visibility: hidden; }
-        .loader {
-            width: 60px; height: 60px;
-            border: 3px solid rgba(0, 212, 255, 0.1);
-            border-top: 3px solid #00d4ff;
+            bottom: 25px;
+            right: 25px;
+            z-index: 999;
+            background: rgba(15,20,35,0.8);
+            border: 2px solid rgba(0,212,255,0.4);
+            color: white;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        .loader-text { margin-top: 20px; color: #00d4ff; font-size: 14px; letter-spacing: 3px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ==================== Particle Canvas ==================== */
-        #particles-canvas {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 1; pointer-events: none;
-        }
-
-        /* ==================== Navigation ==================== */
-        nav {
-            position: fixed; top: 0; left: 0; width: 100%;
-            padding: 15px 40px;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000; transition: all 0.4s ease; background: transparent;
-        }
-        nav.scrolled {
-            background: rgba(10, 10, 26, 0.92);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.3);
-            padding: 10px 40px;
-        }
-        .nav-logo {
-            font-size: 24px; font-weight: 700;
-            color: var(--accent); text-decoration: none; letter-spacing: 2px;
-        }
-        .nav-links { display: flex; list-style: none; gap: 30px; }
-        .nav-links a {
-            color: #b0b0b0; text-decoration: none; font-size: 14px;
-            letter-spacing: 1px; position: relative; transition: color 0.3s ease; padding-bottom: 4px;
-        }
-        .nav-links a::after {
-            content: ''; position: absolute; bottom: 0; left: 0;
-            width: 0; height: 2px; background: var(--accent); transition: width 0.3s ease;
-        }
-        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
-        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
-        .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 5px; }
-        .hamburger span { width: 25px; height: 2px; background: var(--accent); transition: all 0.3s ease; }
-
-        /* ==================== Theme Variables ==================== */
-        :root {
-            --accent: #00d4ff;
-            --accent2: #7b2ff7;
-            --accent3: #ff6b9d;
-            --bg-primary: rgba(10, 10, 26, 0.75);
-            --bg-card: rgba(255, 255, 255, 0.03);
-            --bg-card-hover: rgba(255, 255, 255, 0.06);
-            --border-color: rgba(0, 212, 255, 0.1);
-            --border-hover: rgba(0, 212, 255, 0.3);
-            --text-primary: #fff;
-            --text-secondary: #b0b0b0;
-            --text-muted: #888;
-            --nav-bg: rgba(10, 10, 26, 0.92);
-            --footer-bg: rgba(5, 5, 15, 0.9);
-            --overlay-opacity: 0.75;
-        }
-
-        /* ===== Sunset Theme ===== */
-        body.theme-sunset {
-            --accent: #ff6b35;
-            --accent2: #e63946;
-            --accent3: #f4a261;
-        }
-
-        /* ===== Ocean Theme ===== */
-        body.theme-ocean {
-            --accent: #00b4d8;
-            --accent2: #0077b6;
-            --accent3: #90e0ef;
-        }
-
-        /* ===== Forest Theme ===== */
-        body.theme-forest {
-            --accent: #2d6a4f;
-            --accent2: #40916c;
-            --accent3: #95d5b2;
-        }
-
-        /* ===== Purple Night Theme ===== */
-        body.theme-purple {
-            --accent: #bb86fc;
-            --accent2: #7c3aed;
-            --accent3: #c084fc;
-        }
-
-        /* ===== Cherry Blossom Theme ===== */
-        body.theme-sakura {
-            --accent: #f472b6;
-            --accent2: #ec4899;
-            --accent3: #fda4af;
-        }
-
-        /* ===== Light Theme ===== */
-        body.theme-light {
-            --bg-primary: rgba(255, 255, 255, 0.85);
-            --bg-card: rgba(255, 255, 255, 0.85);
-            --bg-card-hover: rgba(255, 255, 255, 0.95);
-            --border-color: rgba(0, 0, 0, 0.08);
-            --border-hover: rgba(0, 0, 0, 0.15);
-            --text-primary: #1a1a2e;
-            --text-secondary: #555;
-            --text-muted: #777;
-            --nav-bg: rgba(255, 255, 255, 0.95);
-            --footer-bg: rgba(240, 240, 245, 0.95);
-            --overlay-opacity: 0.55;
-        }
-
-        /* ==================== Theme Selector Panel ==================== */
-        #theme-panel {
-            position: fixed; bottom: 30px; right: 80px; z-index: 1001;
-            display: flex; flex-direction: column-reverse; gap: 8px;
-            align-items: flex-end;
-        }
-        #theme-toggle-btn {
-            width: 45px; height: 45px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid var(--border-color);
-            color: var(--accent); border-radius: 50%;
-            font-size: 20px; cursor: pointer; transition: all 0.3s ease;
-            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+            cursor: pointer;
             backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        #theme-toggle-btn:hover {
-            background: rgba(0,212,255,0.15);
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0,212,255,0.4);
         }
-        .theme-options {
-            display: none; flex-direction: column; gap: 6px;
-            background: rgba(10,10,30,0.95);
-            border: 1px solid var(--border-color);
-            border-radius: 15px; padding: 12px;
-            backdrop-filter: blur(20px);
-            animation: fadeInUp 0.3s ease;
+        .theme-panel {
+            position: fixed;
+            bottom: 85px;
+            right: 25px;
+            z-index: 999;
+            background: rgba(10,15,30,0.92);
+            border: 1px solid rgba(0,212,255,0.25);
+            border-radius: 14px;
+            padding: 14px;
+            display: none;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            min-width: 140px;
         }
-        .theme-options.show { display: flex; }
+        .theme-panel.show { display: block; }
+        .theme-panel h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            text-align: center;
+        }
         .theme-option {
-            width: 140px; padding: 8px 12px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 10px; cursor: pointer;
-            display: flex; align-items: center; gap: 10px;
-            transition: all 0.3s ease; color: #ccc; font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            color: #ccc;
+            border: 1px solid transparent;
         }
-        .theme-option:hover {
-            background: rgba(255,255,255,0.08);
-            border-color: var(--border-color);
-            transform: translateX(-5px);
-        }
+        .theme-option:hover { background: rgba(0,212,255,0.1); color: white; }
         .theme-option.active {
-            border-color: var(--accent);
-            background: rgba(0,212,255,0.1);
-            color: #fff;
-        }
-        .theme-dot {
-            width: 18px; height: 18px; border-radius: 50%;
-            flex-shrink: 0; border: 2px solid rgba(255,255,255,0.2);
+            background: rgba(0,212,255,0.15);
+            border-color: rgba(0,212,255,0.3);
+            color: white;
         }
 
-        /* ==================== Hero Section ==================== */
-        #hero {
-            position: relative; height: 100vh;
-            display: flex; align-items: center; justify-content: center;
-            text-align: center; z-index: 1;
+        /* Header */
+        header {
+            padding: 100px 20px 50px;
+            text-align: center;
         }
-        .hero-content { max-width: 800px; padding: 0 20px; }
-        .hero-greeting {
-            font-size: 18px; color: var(--accent);
-            letter-spacing: 5px; text-transform: uppercase; margin-bottom: 10px;
-            opacity: 0; transform: translateY(20px);
-            animation: fadeInUp 0.8s ease 0.5s forwards;
+        .avatar {
+            width: 130px; height: 130px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(0,212,255,0.3), rgba(123,104,238,0.3));
+            border: 3px solid rgba(0,212,255,0.5);
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 52px;
+            box-shadow: 0 0 30px rgba(0,212,255,0.2);
+            animation: float 4s ease-in-out infinite;
         }
-        .hero-name {
-            font-size: 64px; font-weight: 800;
-            background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
-            background-size: 200% 200%;
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        @keyframes float {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #00d4ff, #7b68ee, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: gradientShift 4s ease infinite, fadeInUp 0.8s ease 0.7s forwards;
-            opacity: 0; transform: translateY(20px);
+            margin-bottom: 10px;
+            text-shadow: none;
         }
-        .hero-title { font-size: 28px; color: var(--text-secondary); margin: 15px 0; opacity: 0; transform: translateY(20px); animation: fadeInUp 0.8s ease 0.9s forwards; }
-        .typewriter { display: inline-block; border-right: 3px solid var(--accent); animation: blink 0.8s step-end infinite; }
-        .hero-desc { font-size: 16px; color: var(--text-muted); max-width: 600px; margin: 0 auto 30px; opacity: 0; transform: translateY(20px); animation: fadeInUp 0.8s ease 1.1s forwards; }
-        .hero-buttons { display: flex; gap: 20px; justify-content: center; opacity: 0; transform: translateY(20px); animation: fadeInUp 0.8s ease 1.3s forwards; }
-        .btn { padding: 12px 35px; border-radius: 30px; text-decoration: none; font-size: 14px; letter-spacing: 2px; transition: all 0.3s ease; cursor: pointer; }
-        .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border: none; box-shadow: 0 4px 20px rgba(0,212,255,0.3); }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,212,255,0.5); }
-        .btn-outline { background: transparent; color: var(--accent); border: 2px solid var(--accent); }
-        .btn-outline:hover { background: rgba(0,212,255,0.1); transform: translateY(-3px); }
-        .scroll-indicator { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); opacity: 0; animation: fadeInUp 0.8s ease 1.8s forwards; }
-        .scroll-indicator .mouse { width: 26px; height: 40px; border: 2px solid rgba(0,212,255,0.5); border-radius: 13px; position: relative; margin: 0 auto 10px; }
-        .scroll-indicator .wheel { width: 4px; height: 8px; background: var(--accent); border-radius: 2px; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); animation: scrollWheel 1.5s ease infinite; }
-        .scroll-indicator p { font-size: 11px; color: #666; letter-spacing: 3px; text-transform: uppercase; }
-        @keyframes scrollWheel { 0% { opacity: 1; transform: translateX(-50%) translateY(0); } 100% { opacity: 0; transform: translateX(-50%) translateY(12px); } }
-        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-        @keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-        @keyframes blink { 50% { border-color: transparent; } }
-
-        /* ==================== Sections Common ==================== */
-        section { position: relative; z-index: 1; padding: 100px 20px; background: var(--bg-primary); }
-        .section-container { max-width: 1100px; margin: 0 auto; }
-        .section-header { text-align: center; margin-bottom: 60px; }
-        .section-header h2 { font-size: 36px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; }
-        .section-header .underline { width: 60px; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); margin: 0 auto; border-radius: 2px; }
-        .section-header p { color: var(--text-muted); margin-top: 15px; font-size: 15px; }
-
-        .animate-on-scroll { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-        .animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
-        .animate-left { opacity: 0; transform: translateX(-60px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-        .animate-left.visible { opacity: 1; transform: translateX(0); }
-        .animate-right { opacity: 0; transform: translateX(60px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-        .animate-right.visible { opacity: 1; transform: translateX(0); }
-
-        /* ==================== About Section ==================== */
-        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-        .about-avatar { text-align: center; }
-        .avatar-wrapper { width: 250px; height: 250px; margin: 0 auto; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); padding: 4px; animation: float 6s ease-in-out infinite; }
-        .avatar-inner { width: 100%; height: 100%; border-radius: 50%; background: #0a0a1a; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .avatar-initials { font-size: 72px; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        .about-text h3 { font-size: 24px; color: var(--text-primary); margin-bottom: 15px; }
-        .about-text p { color: var(--text-secondary); font-size: 15px; margin-bottom: 20px; }
-        .info-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .info-list li { font-size: 14px; color: var(--text-secondary); }
-        .info-list li span { color: var(--accent); font-weight: 600; }
-
-        /* ==================== Education Section ==================== */
-        .timeline { position: relative; max-width: 800px; margin: 0 auto; }
-        .timeline::before { content: ''; position: absolute; left: 50%; transform: translateX(-50%); width: 2px; height: 100%; background: linear-gradient(to bottom, var(--accent), var(--accent2)); }
-        .timeline-item { position: relative; width: 45%; padding: 25px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 15px; margin-bottom: 40px; transition: all 0.3s ease; }
-        .timeline-item:hover { border-color: var(--border-hover); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,212,255,0.1); }
-        .timeline-item:nth-child(odd) { margin-left: 5%; }
-        .timeline-item:nth-child(even) { margin-left: 50%; }
-        .timeline-dot { position: absolute; width: 16px; height: 16px; background: var(--accent); border-radius: 50%; top: 30px; box-shadow: 0 0 15px rgba(0,212,255,0.5); }
-        .timeline-item:nth-child(odd) .timeline-dot { right: -8%; transform: translateX(50%); }
-        .timeline-item:nth-child(even) .timeline-dot { left: -8%; transform: translateX(-50%); }
-        .timeline-date { font-size: 13px; color: var(--accent); font-weight: 600; letter-spacing: 1px; }
-        .timeline-title { font-size: 20px; color: var(--text-primary); margin: 8px 0; }
-        .timeline-subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 10px; }
-        .timeline-desc { font-size: 13px; color: var(--text-muted); line-height: 1.8; }
-
-        /* ==================== Skills Section ==================== */
-        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .skill-category { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 15px; padding: 30px; transition: all 0.3s ease; }
-        .skill-category:hover { border-color: var(--border-hover); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,212,255,0.1); }
-        .skill-category-icon { font-size: 36px; margin-bottom: 15px; }
-        .skill-category h3 { font-size: 18px; color: var(--text-primary); margin-bottom: 20px; }
-        .skill-bar-container { margin-bottom: 15px; }
-        .skill-bar-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
-        .skill-bar-header span { font-size: 13px; color: var(--text-secondary); }
-        .skill-bar-header .percentage { color: var(--accent); }
-        .skill-bar { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; }
-        .skill-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 3px; width: 0; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        .skill-tags { display: flex; flex-wrap: wrap; gap: 10px; }
-        .skill-tag { padding: 6px 16px; background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2); border-radius: 20px; font-size: 13px; color: var(--accent); transition: all 0.3s ease; cursor: default; }
-        .skill-tag:hover { background: rgba(0,212,255,0.2); transform: scale(1.05); }
-
-        /* ==================== Experience Section ==================== */
-        .experience-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
-        .exp-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 15px; padding: 35px; transition: all 0.4s ease; position: relative; overflow: hidden; }
-        .exp-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
-        .exp-card:hover::before { transform: scaleX(1); }
-        .exp-card:hover { border-color: var(--border-hover); transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,212,255,0.15); }
-        .exp-card-icon { width: 50px; height: 50px; background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(123,47,247,0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; }
-        .exp-card h3 { font-size: 20px; color: var(--text-primary); margin-bottom: 5px; }
-        .exp-card .exp-role { font-size: 14px; color: var(--accent); margin-bottom: 5px; }
-        .exp-card .exp-date { font-size: 13px; color: #666; margin-bottom: 15px; }
-        .exp-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.8; }
-
-        /* ==================== Honors Section ==================== */
-        .honors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .honor-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 15px; padding: 30px; text-align: center; transition: all 0.4s ease; position: relative; overflow: hidden; }
-        .honor-card:hover { border-color: var(--border-hover); transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,212,255,0.15); }
-        .honor-icon { font-size: 48px; margin-bottom: 15px; }
-        .honor-card h3 { font-size: 16px; color: var(--text-primary); margin-bottom: 10px; }
-        .honor-card p { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
-
-        /* ==================== Stats ==================== */
-        .stats-section { position: relative; z-index: 1; padding: 60px 20px; background: rgba(10,10,26,0.85); }
-        .stats-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; text-align: center; }
-        .stat-item { padding: 20px; }
-        .stat-number { font-size: 42px; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .stat-label { font-size: 14px; color: var(--text-muted); margin-top: 5px; letter-spacing: 1px; }
-
-        /* ==================== Contact ==================== */
-        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; max-width: 900px; margin: 0 auto; }
-        .contact-info h3 { font-size: 24px; color: var(--text-primary); margin-bottom: 20px; }
-        .contact-info p { color: var(--text-secondary); font-size: 15px; margin-bottom: 30px; }
-        .contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding: 15px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; transition: all 0.3s ease; }
-        .contact-item:hover { border-color: var(--border-hover); transform: translateX(5px); }
-        .contact-item-icon { width: 45px; height: 45px; background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(123,47,247,0.15)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-        .contact-item-text { display: flex; flex-direction: column; }
-        .contact-item-label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
-        .contact-item-value { font-size: 15px; color: var(--text-primary); }
-        .contact-form { display: flex; flex-direction: column; gap: 15px; }
-        .contact-form h3 { font-size: 24px; color: var(--text-primary); margin-bottom: 10px; }
-        .form-group input, .form-group textarea {
-            width: 100%; padding: 14px 18px;
-            background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
-            border-radius: 10px; color: var(--text-primary); font-size: 14px;
-            font-family: inherit; transition: all 0.3s ease; outline: none;
+        header .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
         }
-        .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(0,212,255,0.1); }
-        .form-group textarea { height: 120px; resize: vertical; }
-        .btn-submit { padding: 14px 35px; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; letter-spacing: 1px; cursor: pointer; transition: all 0.3s ease; }
-        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,212,255,0.3); }
-
-        /* ==================== Footer ==================== */
-        footer { position: relative; z-index: 1; text-align: center; padding: 40px 20px; background: var(--footer-bg); border-top: 1px solid var(--border-color); }
-        footer p { color: #666; font-size: 13px; }
-        footer .footer-links { margin-bottom: 15px; }
-        footer .footer-links a { color: #888; text-decoration: none; margin: 0 15px; font-size: 13px; transition: color 0.3s ease; }
-        footer .footer-links a:hover { color: var(--accent); }
-
-        /* ==================== Back to Top ==================== */
-        #back-to-top {
-            position: fixed; bottom: 30px; right: 30px;
-            width: 45px; height: 45px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            color: #fff; border: none; border-radius: 50%;
-            font-size: 20px; cursor: pointer; z-index: 999;
-            opacity: 0; visibility: hidden; transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0,212,255,0.3);
+        .daily-quote {
+            margin-top: 20px;
+            padding: 14px 24px;
+            background: rgba(0,212,255,0.08);
+            border: 1px solid rgba(0,212,255,0.2);
+            border-radius: 12px;
+            display: inline-block;
+            max-width: 500px;
+            backdrop-filter: blur(8px);
         }
-        #back-to-top.visible { opacity: 1; visibility: visible; }
-        #back-to-top:hover { transform: translateY(-5px); box-shadow: 0 8px 30px rgba(0,212,255,0.5); }
-
-        /* ==================== Daily Quote ==================== */
-        #daily-quote-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); z-index: 9999;
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; visibility: hidden; transition: all 0.5s ease;
-            backdrop-filter: blur(5px);
+        .daily-quote .label { font-size: 0.8rem; color: var(--primary); margin-bottom: 4px; }
+        .daily-quote .text {
+            font-size: 0.95rem;
+            color: #ccc;
+            font-style: italic;
+            line-height: 1.6;
         }
-        #daily-quote-overlay.show { opacity: 1; visibility: visible; }
-        .quote-box {
-            background: linear-gradient(135deg, rgba(10,10,30,0.95), rgba(20,10,40,0.95));
-            border: 1px solid rgba(0,212,255,0.3); border-radius: 20px;
-            padding: 50px 40px; max-width: 550px; width: 90%; text-align: center;
-            transform: scale(0.8) translateY(30px); transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 20px 60px rgba(0,212,255,0.2);
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 25px;
+            flex-wrap: wrap;
         }
-        #daily-quote-overlay.show .quote-box { transform: scale(1) translateY(0); }
-        .quote-box .quote-emoji { font-size: 50px; margin-bottom: 20px; animation: bounceEmoji 2s ease infinite; }
-        @keyframes bounceEmoji { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-10px) scale(1.1); } }
-        .quote-box .quote-text { font-size: 20px; color: #fff; line-height: 1.8; margin-bottom: 20px; font-style: italic; padding: 0 10px; }
-        .quote-box .quote-author { font-size: 14px; color: #00d4ff; letter-spacing: 2px; margin-bottom: 25px; }
-        .quote-box .quote-close { padding: 10px 35px; background: linear-gradient(135deg, #00d4ff, #7b2ff7); color: #fff; border: none; border-radius: 25px; font-size: 14px; letter-spacing: 2px; cursor: pointer; transition: all 0.3s ease; }
-        .quote-box .quote-close:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,212,255,0.4); }
+        .contact-links a {
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            background: rgba(0,212,255,0.08);
+            border: 1px solid rgba(0,212,255,0.2);
+            border-radius: 25px;
+            font-size: 0.88rem;
+            transition: all 0.3s;
+        }
+        .contact-links a:hover {
+            background: rgba(0,212,255,0.18);
+            border-color: rgba(0,212,255,0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,212,255,0.15);
+        }
 
-        /* ==================== Responsive ==================== */
-        @media (max-width: 768px) {
-            .nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: rgba(10,10,26,0.98); flex-direction: column; padding: 20px; gap: 15px; }
-            .nav-links.open { display: flex; }
-            .hamburger { display: flex; }
-            .hero-name { font-size: 36px; }
-            .hero-title { font-size: 20px; }
-            .about-grid { grid-template-columns: 1fr; gap: 30px; }
-            .timeline::before { left: 20px; }
-            .timeline-item { width: 100%; margin-left: 50px !important; }
-            .timeline-dot { left: -35px !important; right: auto !important; transform: none !important; }
-            .contact-grid { grid-template-columns: 1fr; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .info-list { grid-template-columns: 1fr; }
-            .hero-buttons { flex-direction: column; align-items: center; }
-            #theme-panel { bottom: 85px; right: 15px; }
-            .theme-option { width: 120px; font-size: 12px; padding: 6px 10px; }
+        /* Navigation */
+        nav {
+            background: rgba(10,15,30,0.7);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(0,212,255,0.1);
+            border-bottom: 1px solid rgba(0,212,255,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            max-width: 800px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+        nav ul li a {
+            display: block;
+            padding: 16px 22px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+            font-size: 0.95rem;
+        }
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: rgba(0,212,255,0.05);
+        }
+
+        /* Main */
+        main {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+        section { margin-bottom: 55px; }
+        .section-title {
+            font-size: 1.9rem;
+            color: var(--primary);
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(0,212,255,0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title .icon { font-size: 1.6rem; }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s;
+        }
+        .card:hover {
+            background: var(--card-hover);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+            border-color: rgba(0,212,255,0.3);
+        }
+
+        /* About */
+        .about-text { font-size: 1rem; margin-bottom: 20px; line-height: 1.8; }
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+        }
+        .about-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px;
+            background: rgba(0,212,255,0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(0,212,255,0.08);
+        }
+        .about-item .icon { font-size: 1.4rem; }
+        .about-item .label { font-size: 0.8rem; color: var(--text-light); }
+        .about-item .value { font-weight: 600; font-size: 0.95rem; }
+
+        /* Education Timeline */
+        .timeline { position: relative; padding-left: 35px; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 12px; top: 0; bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--primary), var(--accent), #f472b6);
+            border-radius: 2px;
+        }
+        .timeline-item { position: relative; margin-bottom: 25px; }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -29px; top: 8px;
+            width: 14px; height: 14px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid rgba(10,15,30,0.9);
+            box-shadow: 0 0 10px rgba(0,212,255,0.5);
+        }
+        .timeline-date {
+            font-size: 0.88rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .timeline-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 4px; }
+        .timeline-subtitle { color: var(--text-light); margin-bottom: 10px; font-size: 0.95rem; }
+
+        /* Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+        }
+        .skill-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s;
+        }
+        .skill-card:hover {
+            border-color: rgba(0,212,255,0.3);
+            transform: translateY(-2px);
+        }
+        .skill-card h3 {
+            font-size: 1.05rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .skill-bar { margin-bottom: 14px; }
+        .skill-bar-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 0.88rem;
+        }
+        .skill-bar-bg {
+            height: 8px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .skill-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 4px;
+            transition: width 1.2s ease-out;
+        }
+        .skill-note {
+            font-size: 0.82rem;
+            color: var(--text-light);
+            margin-top: 6px;
+        }
+
+        /* Experience */
+        .exp-card { border-left: 3px solid var(--primary); }
+        .exp-card h3 { font-size: 1.2rem; margin-bottom: 5px; }
+        .exp-card .role { color: var(--primary); font-weight: 600; margin-bottom: 10px; font-size: 0.95rem; }
+        .exp-card .desc { color: var(--text-light); font-size: 0.95rem; line-height: 1.8; }
+
+        /* Honors */
+        .honors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+        }
+        .honor-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 18px;
+            background: rgba(0,212,255,0.04);
+            border-radius: 12px;
+            border: 1px solid rgba(0,212,255,0.08);
+            transition: all 0.3s;
+        }
+        .honor-item:hover {
+            background: rgba(0,212,255,0.08);
+            border-color: rgba(0,212,255,0.2);
+        }
+        .honor-item .emoji { font-size: 1.8rem; }
+        .honor-item h4 { font-size: 1rem; margin-bottom: 4px; }
+        .honor-item p { font-size: 0.85rem; color: var(--text-light); }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-light);
+            font-size: 0.88rem;
+            border-top: 1px solid rgba(0,212,255,0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            header h1 { font-size: 2rem; }
+            nav ul { justify-content: flex-start; overflow-x: auto; padding: 0 10px; }
+            nav ul li a { padding: 12px 16px; font-size: 0.88rem; white-space: nowrap; }
+            .contact-links { flex-direction: column; align-items: center; }
+            .skills-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- Anime Background Canvas -->
-    <canvas id="anime-bg-canvas"></canvas>
-    <div id="video-overlay"></div>
+    <canvas id="anime-bg"></canvas>
 
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div class="loader"></div>
-        <p class="loader-text">LOADING...</p>
+    <!-- Theme Switcher -->
+    <button class="theme-toggle" id="themeBtn">🎨</button>
+    <div class="theme-panel" id="themePanel">
+        <h4>选择主题风格</h4>
+        <div class="theme-option active" data-theme="default">🌌 星空科技</div>
+        <div class="theme-option" data-theme="ocean">🌊 深海蓝</div>
+        <div class="theme-option" data-theme="sunset">🌅 落日晚霞</div>
+        <div class="theme-option" data-theme="forest">🌲 森林绿</div>
+        <div class="theme-option" data-theme="purple">💜 紫夜幻梦</div>
+        <div class="theme-option" data-theme="sakura">🌸 樱花粉</div>
+        <div class="theme-option" data-theme="light">☀️ 清新浅色</div>
     </div>
 
-    <!-- Particle Canvas -->
-    <canvas id="particles-canvas"></canvas>
+    <div class="content-wrapper">
+        <header>
+            <div class="avatar">严</div>
+            <h1>严小军</h1>
+            <p class="subtitle">云计算技术应用 | 售前售后客服/销售</p>
+            <div class="daily-quote">
+                <div class="label">✨ 快乐宣言</div>
+                <div class="text" id="quoteText">生活不止眼前的代码，还有远方的 bug。</div>
+            </div>
+            <div class="contact-links">
+                <a href="tel:17762892519">📱 177-6289-2519</a>
+                <a href="mailto:1735456860@qq.com">📧 1735456860@qq.com</a>
+                <a href="#">📍 湖北科技职业学院</a>
+            </div>
+        </header>
 
-    <!-- Navigation -->
-    <nav id="navbar">
-        <a href="#hero" class="nav-logo">YXJ</a>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#hero" class="active">首页</a></li>
-            <li><a href="#about">关于我</a></li>
-            <li><a href="#education">教育经历</a></li>
-            <li><a href="#skills">技能特长</a></li>
-            <li><a href="#experience">校园经历</a></li>
-            <li><a href="#honors">荣誉证书</a></li>
-            <li><a href="#contact">联系我</a></li>
-        </ul>
-        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-            <span></span><span></span><span></span>
-        </div>
-    </nav>
+        <nav>
+            <ul>
+                <li><a href="#about" class="active">关于我</a></li>
+                <li><a href="#education">教育经历</a></li>
+                <li><a href="#skills">技能特长</a></li>
+                <li><a href="#experience">校园经历</a></li>
+                <li><a href="#honors">荣誉证书</a></li>
+            </ul>
+        </nav>
 
-    <!-- Hero Section -->
-    <section id="hero">
-        <div class="hero-content">
-            <p class="hero-greeting">WELCOME TO MY PORTFOLIO</p>
-            <h1 class="hero-name">严小军</h1>
-            <h2 class="hero-title"><span class="typewriter" id="typewriter"></span></h2>
-            <p class="daily-quote-inline" id="daily-quote-inline" style="font-size:15px;color:rgba(0,212,255,0.7);margin-bottom:20px;min-height:24px;transition:all 0.5s ease;"></p>
-            <p class="hero-desc">扎实的云计算技术基础，出色的团队协作与沟通能力，追求卓越的售前售后客服/销售岗位人才。</p>
-            <div class="hero-buttons">
-                <a href="#contact" class="btn btn-primary">联系我</a>
-                <a href="#about" class="btn btn-outline">了解更多</a>
-            </div>
-        </div>
-        <div class="scroll-indicator">
-            <div class="mouse"><div class="wheel"></div></div>
-            <p>向下滚动</p>
-        </div>
-    </section>
+        <main>
+            <section id="about">
+                <h2 class="section-title"><span class="icon">👤</span> 关于我</h2>
+                <div class="card">
+                    <p class="about-text">
+                        本人具备扎实的云运维与云计算专业基础，熟练掌握 Linux、Python、MySQL 等核心技术，同时精通 Office 办公软件与编程工具。在校期间担任广播站组长，锻炼了出色的团队协作与沟通执行能力。多次荣获校级荣誉及国家励志奖学金，兼具较强学习能力与抗压素质。对计算机类别售前售后客服以及销售岗位充满热情，能快速适应岗位需求，高效完成工作任务。
+                    </p>
+                    <div class="about-grid">
+                        <div class="about-item">
+                            <span class="icon">👤</span>
+                            <div><div class="label">姓名</div><div class="value">严小军</div></div>
+                        </div>
+                        <div class="about-item">
+                            <span class="icon">⚧</span>
+                            <div><div class="label">性别</div><div class="value">男</div></div>
+                        </div>
+                        <div class="about-item">
+                            <span class="icon">🎂</span>
+                            <div><div class="label">年龄</div><div class="value">21岁</div></div>
+                        </div>
+                        <div class="about-item">
+                            <span class="icon">💼</span>
+                            <div><div class="label">意向岗位</div><div class="value">售前售后客服/销售</div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-    <!-- About Section -->
-    <section id="about">
-        <div class="section-container">
-            <div class="section-header animate-on-scroll">
-                <h2>关于我</h2><div class="underline"></div><p>热爱技术、善于沟通、追求卓越</p>
-            </div>
-            <div class="about-grid">
-                <div class="about-avatar animate-left">
-                    <div class="avatar-wrapper"><div class="avatar-inner"><span class="avatar-initials">严</span></div></div>
+            <section id="education">
+                <h2 class="section-title"><span class="icon">🎓</span> 教育经历</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2023.09 - 2026.06</div>
+                        <h3 class="timeline-title">湖北科技职业学院</h3>
+                        <p class="timeline-subtitle">云计算技术应用 / 专科</p>
+                        <p class="desc" style="color:var(--text-light);font-size:0.95rem;line-height:1.8;">
+                            主修课程：云计算导论、计算机网络技术、Linux 系统应用、Python 程序设计、数据库技术（MySQL）、虚拟化技术与应用、OpenStack 技术与应用、私有云基础架构与运维等。
+                        </p>
+                    </div>
                 </div>
-                <div class="about-text animate-right">
-                    <h3>你好，我是严小军 👋</h3>
-                    <p>本人具备扎实的云运维与云计算专业基础，熟练掌握 Linux、Python、MySQL 等核心技术，同时精通 Office 办公软件与编程工具。在校期间担任广播站组长，锻炼了出色的团队协作与沟通执行能力。多次荣获校级荣誉及国家励志奖学金，兼具较强学习能力与抗压素质。</p>
-                    <p>对计算机类别售前售后客服以及销售岗位充满热情，能快速适应岗位需求，高效完成工作任务。</p>
-                    <ul class="info-list">
-                        <li><span>姓名：</span>严小军</li><li><span>性别：</span>男</li>
-                        <li><span>年龄：</span>21</li><li><span>电话：</span>17762892519</li>
-                        <li><span>邮箱：</span>1735456860@qq.com</li><li><span>意向：</span>售前售后客服/销售</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
+            </section>
 
-    <!-- Stats -->
-    <div class="stats-section">
-        <div class="stats-grid">
-            <div class="stat-item animate-on-scroll"><div class="stat-number" data-target="5">0</div><div class="stat-label">荣誉证书</div></div>
-            <div class="stat-item animate-on-scroll"><div class="stat-number" data-target="6">0</div><div class="stat-label">技能特长</div></div>
-            <div class="stat-item animate-on-scroll"><div class="stat-number" data-target="3">0</div><div class="stat-label">在校经历</div></div>
-            <div class="stat-item animate-on-scroll"><div class="stat-number" data-target="100">0</div><div class="stat-label">努力程度%</div></div>
-        </div>
-    </div>
+            <section id="skills">
+                <h2 class="section-title"><span class="icon">💡</span> 技能特长</h2>
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <h3>💼 办公软件</h3>
+                        <div class="skill-bar">
+                            <div class="skill-bar-header"><span>Word / Excel / PPT</span><span>95%</span></div>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:95%"></div></div>
+                        </div>
+                        <p class="skill-note">WPS二级证书</p>
+                    </div>
+                    <div class="skill-card">
+                        <h3>🐧 系统运维</h3>
+                        <div class="skill-bar">
+                            <div class="skill-bar-header"><span>Linux 多系统运维</span><span>85%</span></div>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%"></div></div>
+                        </div>
+                        <p class="skill-note">Ubuntu / CentOS / RHEL</p>
+                    </div>
+                    <div class="skill-card">
+                        <h3>🐍 编程开发</h3>
+                        <div class="skill-bar">
+                            <div class="skill-bar-header"><span>Python / C++</span><span>70%</span></div>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:70%"></div></div>
+                        </div>
+                        <p class="skill-note">逻辑分析与代码调试</p>
+                    </div>
+                    <div class="skill-card">
+                        <h3>☁️ 云计算技术</h3>
+                        <div class="skill-bar">
+                            <div class="skill-bar-header"><span>OpenStack / MySQL</span><span>75%</span></div>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:75%"></div></div>
+                        </div>
+                        <p class="skill-note">私有云与容器技术</p>
+                    </div>
+                    <div class="skill-card">
+                        <h3>🗣️ 语言能力</h3>
+                        <div class="skill-bar">
+                            <div class="skill-bar-header"><span>日语基础</span><span>45%</span></div>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:45%"></div></div>
+                        </div>
+                        <p class="skill-note">基础听说与阅读</p>
+                    </div>
+                    <div class="skill-card">
+                        <h3>🤝 综合素质</h3>
+                        <div class="skill-bar">
+                            <div class="skill-bar-header"><span>沟通与团队协作</span><span>90%</span></div>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%"></div></div>
+                        </div>
+                        <p class="skill-note">组织协调与抗压能力</p>
+                    </div>
+                </div>
+            </section>
 
-    <!-- Education -->
-    <section id="education">
-        <div class="section-container">
-            <div class="section-header animate-on-scroll"><h2>教育经历</h2><div class="underline"></div><p>扎实的专业知识，系统的云计算技术学习</p></div>
-            <div class="timeline">
-                <div class="timeline-item animate-left">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">2023.09 - 2026.06</div>
-                    <h3 class="timeline-title">湖北科技职业学院</h3>
-                    <p class="timeline-subtitle">云计算技术应用 / 专科</p>
-                    <p class="timeline-desc">主修课程：云计算导论、计算机网络技术、Linux 系统应用、Python 程序设计、数据库技术（MySQL）、虚拟化技术与应用、OpenStack 技术与应用、私有云基础架构与运维等。</p>
+            <section id="experience">
+                <h2 class="section-title"><span class="icon">🏆</span> 校园经历</h2>
+                <div class="card exp-card">
+                    <h3>🎙️ 校园广播站</h3>
+                    <p class="role">组长 | 2023.09 - 2026.06</p>
+                    <p class="desc">担任校园广播站组长期间，统筹日常播音安排与团队分工，协调成员完成节目策划、录制及播出工作，提升团队协作效率与广播站运营规范性，锻炼了组织协调、沟通统筹与现场执行能力。</p>
                 </div>
-            </div>
-        </div>
-    </section>
+                <div class="card exp-card">
+                    <h3>🏆 校级技能竞赛</h3>
+                    <p class="role">参赛选手 | 2023.09 - 2026.06</p>
+                    <p class="desc">积极参与校级技能竞赛，围绕专业知识与实操技能备赛训练，在团队协作中完成方案设计与成果展示，提升专业应用、问题解决与抗压应变能力，收获竞赛经验与综合素养提升。</p>
+                </div>
+                <div class="card exp-card">
+                    <h3>📢 主题宣讲活动</h3>
+                    <p class="role">优秀主讲人 | 2023.09 - 2026.06</p>
+                    <p class="desc">具备较强语言表达与现场控场能力，多次参与主题分享、宣讲展示活动，逻辑清晰、台风稳健，获得师生一致认可，被评为校级"优秀主讲人"。</p>
+                </div>
+            </section>
 
-    <!-- Skills -->
-    <section id="skills">
-        <div class="section-container">
-            <div class="section-header animate-on-scroll"><h2>技能特长</h2><div class="underline"></div><p>多元化技能，全方位能力</p></div>
-            <div class="skills-grid">
-                <div class="skill-category animate-on-scroll">
-                    <div class="skill-category-icon">💼</div><h3>办公软件</h3>
-                    <div class="skill-bar-container"><div class="skill-bar-header"><span>Word / Excel / PPT</span><span class="percentage">95%</span></div><div class="skill-bar"><div class="skill-bar-fill" data-width="95"></div></div></div>
-                    <div class="skill-tags"><span class="skill-tag">文档排版</span><span class="skill-tag">数据处理</span><span class="skill-tag">图表制作</span><span class="skill-tag">WPS二级</span></div>
+            <section id="honors">
+                <h2 class="section-title"><span class="icon">🎖️</span> 荣誉证书</h2>
+                <div class="honors-grid">
+                    <div class="honor-item">
+                        <span class="emoji">🏅</span>
+                        <div><h4>国家励志奖学金</h4><p>学习态度端正、成绩优异，兼顾学业与综合素质发展</p></div>
+                    </div>
+                    <div class="honor-item">
+                        <span class="emoji">⭐</span>
+                        <div><h4>校级"励志之星"</h4><p>严于律己、积极进取，树立优秀学生榜样</p></div>
+                    </div>
+                    <div class="honor-item">
+                        <span class="emoji">🎤</span>
+                        <div><h4>校级"优秀主讲人"</h4><p>语言表达能力强，逻辑清晰、台风稳健</p></div>
+                    </div>
+                    <div class="honor-item">
+                        <span class="emoji">🌟</span>
+                        <div><h4>校级"优秀实践个人"</h4><p>积极参与实践活动，认真负责、踏实肯干</p></div>
+                    </div>
+                    <div class="honor-item">
+                        <span class="emoji">💻</span>
+                        <div><h4>WPS 计算机二级</h4><p>熟练掌握办公软件操作技能</p></div>
+                    </div>
                 </div>
-                <div class="skill-category animate-on-scroll">
-                    <div class="skill-category-icon">🐧</div><h3>系统运维</h3>
-                    <div class="skill-bar-container"><div class="skill-bar-header"><span>Linux 多系统运维</span><span class="percentage">85%</span></div><div class="skill-bar"><div class="skill-bar-fill" data-width="85"></div></div></div>
-                    <div class="skill-tags"><span class="skill-tag">Ubuntu</span><span class="skill-tag">CentOS</span><span class="skill-tag">RHEL</span><span class="skill-tag">虚拟化</span></div>
-                </div>
-                <div class="skill-category animate-on-scroll">
-                    <div class="skill-category-icon">🐍</div><h3>编程开发</h3>
-                    <div class="skill-bar-container"><div class="skill-bar-header"><span>Python / C++</span><span class="percentage">70%</span></div><div class="skill-bar"><div class="skill-bar-fill" data-width="70"></div></div></div>
-                    <div class="skill-tags"><span class="skill-tag">Python</span><span class="skill-tag">C++</span><span class="skill-tag">逻辑分析</span><span class="skill-tag">代码调试</span></div>
-                </div>
-                <div class="skill-category animate-on-scroll">
-                    <div class="skill-category-icon">☁️</div><h3>云计算技术</h3>
-                    <div class="skill-bar-container"><div class="skill-bar-header"><span>云平台与数据库</span><span class="percentage">75%</span></div><div class="skill-bar"><div class="skill-bar-fill" data-width="75"></div></div></div>
-                    <div class="skill-tags"><span class="skill-tag">OpenStack</span><span class="skill-tag">MySQL</span><span class="skill-tag">私有云</span><span class="skill-tag">容器技术</span></div>
-                </div>
-                <div class="skill-category animate-on-scroll">
-                    <div class="skill-category-icon">🗣️</div><h3>语言能力</h3>
-                    <div class="skill-bar-container"><div class="skill-bar-header"><span>日语基础</span><span class="percentage">45%</span></div><div class="skill-bar"><div class="skill-bar-fill" data-width="45"></div></div></div>
-                    <div class="skill-tags"><span class="skill-tag">日语听说</span><span class="skill-tag">基础阅读</span><span class="skill-tag">跨语言学习</span></div>
-                </div>
-                <div class="skill-category animate-on-scroll">
-                    <div class="skill-category-icon">🤝</div><h3>综合素质</h3>
-                    <div class="skill-bar-container"><div class="skill-bar-header"><span>沟通与团队协作</span><span class="percentage">90%</span></div><div class="skill-bar"><div class="skill-bar-fill" data-width="90"></div></div></div>
-                    <div class="skill-tags"><span class="skill-tag">团队协作</span><span class="skill-tag">语言表达</span><span class="skill-tag">组织协调</span><span class="skill-tag">抗压能力</span></div>
-                </div>
-            </div>
-        </div>
-    </section>
+            </section>
+        </main>
 
-    <!-- Experience -->
-    <section id="experience">
-        <div class="section-container">
-            <div class="section-header animate-on-scroll"><h2>校园经历</h2><div class="underline"></div><p>丰富的校园实践，锻炼综合能力</p></div>
-            <div class="experience-cards">
-                <div class="exp-card animate-on-scroll">
-                    <div class="exp-card-icon">🎙️</div><h3>校园广播站</h3><p class="exp-role">组长</p><p class="exp-date">2023.09 - 2026.06</p>
-                    <p>担任校园广播站组长期间，统筹日常播音安排与团队分工，协调成员完成节目策划、录制及播出工作，提升团队协作效率与广播站运营规范性，锻炼了组织协调、沟通统筹与现场执行能力。</p>
-                </div>
-                <div class="exp-card animate-on-scroll">
-                    <div class="exp-card-icon">🏆</div><h3>校级技能竞赛</h3><p class="exp-role">参赛选手</p><p class="exp-date">2023.09 - 2026.06</p>
-                    <p>积极参与校级技能竞赛，围绕专业知识与实操技能备赛训练，在团队协作中完成方案设计与成果展示，提升专业应用、问题解决与抗压应变能力，收获竞赛经验与综合素养提升。</p>
-                </div>
-                <div class="exp-card animate-on-scroll">
-                    <div class="exp-card-icon">📢</div><h3>主题宣讲活动</h3><p class="exp-role">优秀主讲人</p><p class="exp-date">2023.09 - 2026.06</p>
-                    <p>具备较强语言表达与现场控场能力，多次参与主题分享、宣讲展示活动，逻辑清晰、台风稳健，获得师生一致认可，被评为校级"优秀主讲人"。</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Honors -->
-    <section id="honors">
-        <div class="section-container">
-            <div class="section-header animate-on-scroll"><h2>荣誉证书</h2><div class="underline"></div><p>用实力证明自己，以荣誉见证成长</p></div>
-            <div class="honors-grid">
-                <div class="honor-card animate-on-scroll"><div class="honor-icon">🏅</div><h3>国家励志奖学金</h3><p>学习态度端正、成绩优异，兼顾学业与综合素质发展，体现较强学习能力与自律意识，品学兼优。</p></div>
-                <div class="honor-card animate-on-scroll"><div class="honor-icon">⭐</div><h3>校级"励志之星"</h3><p>严于律己、积极进取，以良好的学习态度与综合表现展现励志向上的精神风貌，树立优秀学生榜样。</p></div>
-                <div class="honor-card animate-on-scroll"><div class="honor-icon">🎤</div><h3>校级"优秀主讲人"</h3><p>具备较强语言表达与现场控场能力，逻辑清晰、台风稳健，获得师生一致认可。</p></div>
-                <div class="honor-card animate-on-scroll"><div class="honor-icon">🌟</div><h3>校级"优秀实践个人"</h3><p>积极参与校内外实践活动，认真负责、踏实肯干，在实践中提升综合能力与服务意识。</p></div>
-                <div class="honor-card animate-on-scroll"><div class="honor-icon">💻</div><h3>WPS 计算机二级</h3><p>熟练掌握文字处理、表格制作、演示文稿等办公技能，具备规范高效的计算机操作能力。</p></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact">
-        <div class="section-container">
-            <div class="section-header animate-on-scroll"><h2>联系我</h2><div class="underline"></div><p>期待与您取得联系，共创美好未来</p></div>
-            <div class="contact-grid">
-                <div class="contact-info animate-left">
-                    <h3>联系方式</h3><p>如果您对我的背景和能力感兴趣，欢迎随时联系我！</p>
-                    <div class="contact-item"><div class="contact-item-icon">📱</div><div class="contact-item-text"><span class="contact-item-label">电话</span><span class="contact-item-value">177-6289-2519</span></div></div>
-                    <div class="contact-item"><div class="contact-item-icon">📧</div><div class="contact-item-text"><span class="contact-item-label">邮箱</span><span class="contact-item-value">1735456860@qq.com</span></div></div>
-                    <div class="contact-item"><div class="contact-item-icon">🎓</div><div class="contact-item-text"><span class="contact-item-label">学校</span><span class="contact-item-value">湖北科技职业学院</span></div></div>
-                    <div class="contact-item"><div class="contact-item-icon">💼</div><div class="contact-item-text"><span class="contact-item-label">意向岗位</span><span class="contact-item-value">售前售后客服 / 销售</span></div></div>
-                </div>
-                <div class="contact-form animate-right">
-                    <h3>发送消息</h3>
-                    <div class="form-group"><input type="text" placeholder="您的姓名" /></div>
-                    <div class="form-group"><input type="email" placeholder="您的邮箱" /></div>
-                    <div class="form-group"><input type="text" placeholder="主题" /></div>
-                    <div class="form-group"><textarea placeholder="请输入您的消息..."></textarea></div>
-                    <button class="btn-submit" onclick="handleSend()">发送消息</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-links">
-            <a href="#hero">首页</a><a href="#about">关于我</a><a href="#skills">技能</a><a href="#honors">荣誉</a><a href="#contact">联系</a>
-        </div>
-        <p>&copy; 2025 严小军 | 个人简历网站 | 用代码书写未来</p>
-    </footer>
-
-    <!-- Daily Quote Overlay -->
-    <div id="daily-quote-overlay" onclick="closeQuote(event)">
-        <div class="quote-box">
-            <div class="quote-emoji" id="quote-emoji">😊</div>
-            <div class="quote-text" id="quote-text"></div>
-            <div class="quote-author" id="quote-author"></div>
-            <button class="quote-close" onclick="closeQuoteBtn()">开始探索 ✨</button>
-        </div>
-    </div>
-
-    <!-- Back to Top -->
-    <button id="back-to-top" onclick="scrollToTop()">↑</button>
-
-    <!-- Theme Panel -->
-    <div id="theme-panel">
-        <button id="theme-toggle-btn" onclick="toggleThemePanel()">🎨</button>
-        <div class="theme-options" id="theme-options">
-            <div class="theme-option active" onclick="setTheme('default')" data-theme="default">
-                <div class="theme-dot" style="background:linear-gradient(135deg,#00d4ff,#7b2ff7)"></div>🌌 星空科技
-            </div>
-            <div class="theme-option" onclick="setTheme('ocean')" data-theme="ocean">
-                <div class="theme-dot" style="background:linear-gradient(135deg,#00b4d8,#0077b6)"></div>🌊 深海蓝
-            </div>
-            <div class="theme-option" onclick="setTheme('sunset')" data-theme="sunset">
-                <div class="theme-dot" style="background:linear-gradient(135deg,#ff6b35,#e63946)"></div>🌅 落日晚霞
-            </div>
-            <div class="theme-option" onclick="setTheme('forest')" data-theme="forest">
-                <div class="theme-dot" style="background:linear-gradient(135deg,#2d6a4f,#95d5b2)"></div>🌲 森林绿
-            </div>
-            <div class="theme-option" onclick="setTheme('purple')" data-theme="purple">
-                <div class="theme-dot" style="background:linear-gradient(135deg,#bb86fc,#7c3aed)"></div>💜 紫夜幻梦
-            </div>
-            <div class="theme-option" onclick="setTheme('sakura')" data-theme="sakura">
-                <div class="theme-dot" style="background:linear-gradient(135deg,#f472b6,#ec4899)"></div>🌸 樱花粉
-            </div>
-            <div class="theme-option" onclick="setTheme('light')" data-theme="light">
-                <div class="theme-dot" style="background:linear-gradient(135deg,#667eea,#764ba2)"></div>☀️ 清新浅色
-            </div>
-        </div>
+        <footer>
+            <p>© 2025 严小军 | 个人简历网站</p>
+        </footer>
     </div>
 
     <script>
-        // ==================== Theme Config ====================
-        const themeConfig = {
-            default: { overlay: 'rgba(10,10,26,0.55)', particleColor: '0, 212, 255',
-                sky: ['#0a0a2e','#1a1a4e','#0d1b3e'], clouds: 'rgba(100,150,255,0.08)', sakura: true, stars: true, moon: true },
-            ocean:   { overlay: 'rgba(0,20,40,0.45)', particleColor: '0, 180, 216',
-                sky: ['#001428','#002850','#001830'], clouds: 'rgba(0,150,200,0.06)', sakura: false, stars: false, moon: false, waves: true },
-            sunset:  { overlay: 'rgba(20,10,5,0.45)', particleColor: '255, 107, 53',
-                sky: ['#1a0a0a','#4a1a2a','#ff6b35'], clouds: 'rgba(255,150,80,0.12)', sakura: false, stars: false, moon: false, sun: true },
-            forest:  { overlay: 'rgba(5,15,10,0.5)', particleColor: '45, 106, 79',
-                sky: ['#0a1a0a','#1a3a1a','#0a2a1a'], clouds: 'rgba(80,180,100,0.06)', sakura: false, stars: false, fireflies: true },
-            purple:  { overlay: 'rgba(15,5,30,0.5)', particleColor: '187, 134, 252',
-                sky: ['#0a0020','#1a0040','#2a0060'], clouds: 'rgba(180,100,255,0.08)', sakura: true, stars: true, moon: true },
-            sakura:  { overlay: 'rgba(20,5,10,0.45)', particleColor: '244, 114, 182',
-                sky: ['#1a0a1a','#3a1a2a','#2a1020'], clouds: 'rgba(255,180,200,0.1)', sakura: true, stars: true, moon: true },
-            light:   { overlay: 'rgba(240,245,250,0.35)', particleColor: '100, 126, 234',
-                sky: ['#87CEEB','#B0E0E6','#E0F0FF'], clouds: 'rgba(255,255,255,0.3)', sakura: false, stars: false, moon: false, sun: true }
-        };
-
-        let currentTheme = localStorage.getItem('theme') || 'default';
-        let currentAnimeScene = currentTheme;
-
-        // ==================== Anime Background Canvas ====================
-        const animeCanvas = document.getElementById('anime-bg-canvas');
-        const actx = animeCanvas.getContext('2d');
-        let animeW, animeH;
-        let clouds = [], petals = [], starsArr = [], firefliesArr = [], wavesArr = [];
-
-        function resizeAnime() {
-            animeW = animeCanvas.width = window.innerWidth;
-            animeH = animeCanvas.height = window.innerHeight;
+    // ==================== Theme Config ====================
+    const themeConfig = {
+        default: {
+            sky: ['#0a0a2e','#1a1a4e','#0d1b3e'],
+            clouds: 'rgba(100,150,255,0.12)', stars: true, moon: true, sakura: true, fireflies: false, sun: false, waves: false
+        },
+        ocean: {
+            sky: ['#001428','#002850','#001830'],
+            clouds: 'rgba(0,180,220,0.1)', stars: false, moon: false, sakura: false, fireflies: false, sun: false, waves: true
+        },
+        sunset: {
+            sky: ['#1a0a0a','#4a1a2a','#ff6b35'],
+            clouds: 'rgba(255,160,80,0.18)', stars: false, moon: false, sakura: false, fireflies: false, sun: true, waves: false
+        },
+        forest: {
+            sky: ['#0a1a0a','#1a3a1a','#0a2a1a'],
+            clouds: 'rgba(80,180,100,0.1)', stars: false, moon: false, sakura: false, fireflies: true, sun: false, waves: false
+        },
+        purple: {
+            sky: ['#0a0020','#1a0040','#2a0060'],
+            clouds: 'rgba(180,100,255,0.12)', stars: true, moon: true, sakura: true, fireflies: false, sun: false, waves: false
+        },
+        sakura: {
+            sky: ['#1a0a1a','#3a1a2a','#2a1020'],
+            clouds: 'rgba(255,180,200,0.14)', stars: true, moon: true, sakura: true, fireflies: false, sun: false, waves: false
+        },
+        light: {
+            sky: ['#5BA3D9','#87CEEB','#B0E0E6'],
+            clouds: 'rgba(255,255,255,0.5)', stars: false, moon: false, sakura: false, fireflies: false, sun: true, waves: false
         }
-        resizeAnime();
-        window.addEventListener('resize', () => { resizeAnime(); initAnimeScene(); });
+    };
 
-        function initAnimeScene() {
-            clouds = []; petals = []; starsArr = []; firefliesArr = [];
-            const cfg = themeConfig[currentAnimeScene] || themeConfig.default;
+    let currentTheme = localStorage.getItem('theme') || 'default';
+    let currentScene = currentTheme;
 
-            // Clouds for all themes
-            for (let i = 0; i < 8; i++) {
-                clouds.push({
-                    x: Math.random() * animeW * 1.5 - animeW * 0.25,
-                    y: Math.random() * animeH * 0.5,
-                    w: 120 + Math.random() * 200,
-                    h: 30 + Math.random() * 40,
-                    speed: 0.15 + Math.random() * 0.25,
-                    opacity: 0.3 + Math.random() * 0.5,
-                    color: cfg.clouds
+    // ==================== Anime Background Canvas ====================
+    const canvas = document.getElementById('anime-bg');
+    const ctx = canvas.getContext('2d');
+    let W, H;
+
+    // Pre-computed data
+    let treeProfile = [];
+    let mountain1 = [], mountain2 = [], farMountain = [];
+    let clouds = [], petals = [], starList = [], fireflyList = [];
+
+    function resize() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+    }
+
+    function seedRandom(seed) {
+        let s = seed;
+        return function() {
+            s = (s * 9301 + 49297) % 233280;
+            return s / 233280;
+        };
+    }
+
+    function precompute() {
+        const rng = seedRandom(42);
+        // Tree profile
+        treeProfile = [];
+        for (let x = 0; x < 4000; x += 6) {
+            const h = Math.sin(x * 0.05) * 12 + rng() * 18 + 18;
+            treeProfile.push({ x: x, h: h });
+        }
+        // Mountains (deterministic sine combos)
+        for (let x = 0; x <= 4000; x += 3) {
+            farMountain.push(Math.sin(x * 0.002) * 80 + Math.sin(x * 0.005) * 40 + Math.sin(x * 0.0008) * 100);
+            mountain1.push(Math.sin(x * 0.003) * 60 + Math.sin(x * 0.007) * 30 + Math.sin(x * 0.001) * 80);
+            mountain2.push(Math.sin(x * 0.005 + 1) * 40 + Math.sin(x * 0.01 + 2) * 20 + Math.sin(x * 0.002) * 50);
+        }
+    }
+    precompute();
+
+    function initScene() {
+        const cfg = themeConfig[currentScene] || themeConfig.default;
+        clouds = []; petals = []; starList = []; fireflyList = [];
+
+        // Clouds
+        for (let i = 0; i < 10; i++) {
+            clouds.push({
+                x: Math.random() * W * 1.5 - W * 0.25,
+                y: Math.random() * H * 0.4,
+                w: 100 + Math.random() * 220,
+                h: 25 + Math.random() * 40,
+                speed: 0.1 + Math.random() * 0.3,
+                opacity: 0.4 + Math.random() * 0.6
+            });
+        }
+
+        // Sakura petals
+        if (cfg.sakura) {
+            for (let i = 0; i < 40; i++) {
+                petals.push(newPetal());
+            }
+        }
+
+        // Stars
+        if (cfg.stars) {
+            for (let i = 0; i < 120; i++) {
+                starList.push({
+                    x: Math.random() * W,
+                    y: Math.random() * H * 0.55,
+                    r: Math.random() * 1.8 + 0.3,
+                    phase: Math.random() * Math.PI * 2,
+                    speed: 0.02 + Math.random() * 0.05
                 });
             }
+        }
 
-            // Sakura petals
-            if (cfg.sakura) {
-                for (let i = 0; i < 35; i++) {
-                    petals.push(createPetal());
-                }
-            }
-
-            // Stars
-            if (cfg.stars) {
-                for (let i = 0; i < 100; i++) {
-                    starsArr.push({
-                        x: Math.random() * animeW, y: Math.random() * animeH * 0.6,
-                        r: Math.random() * 1.5 + 0.3,
-                        twinkle: Math.random() * Math.PI * 2,
-                        speed: 0.02 + Math.random() * 0.04
-                    });
-                }
-            }
-
-            // Fireflies for forest
-            if (cfg.fireflies) {
-                for (let i = 0; i < 40; i++) {
-                    firefliesArr.push({
-                        x: Math.random() * animeW, y: Math.random() * animeH,
-                        vx: (Math.random() - 0.5) * 0.8, vy: (Math.random() - 0.5) * 0.6,
-                        r: 1.5 + Math.random() * 2, phase: Math.random() * Math.PI * 2,
-                        speed: 0.01 + Math.random() * 0.03
-                    });
-                }
+        // Fireflies
+        if (cfg.fireflies) {
+            for (let i = 0; i < 50; i++) {
+                fireflyList.push({
+                    x: Math.random() * W,
+                    y: Math.random() * H,
+                    vx: (Math.random() - 0.5) * 0.8,
+                    vy: (Math.random() - 0.5) * 0.6,
+                    r: 1.5 + Math.random() * 2.5,
+                    phase: Math.random() * Math.PI * 2,
+                    speed: 0.01 + Math.random() * 0.03
+                });
             }
         }
+    }
 
-        function createPetal() {
-            return {
-                x: Math.random() * animeW, y: -20 - Math.random() * 100,
-                size: 3 + Math.random() * 5,
-                speedX: (Math.random() - 0.3) * 1.2,
-                speedY: 0.8 + Math.random() * 1.5,
-                rotation: Math.random() * Math.PI * 2,
-                rotSpeed: (Math.random() - 0.5) * 0.05,
-                opacity: 0.4 + Math.random() * 0.6,
-                wobble: Math.random() * Math.PI * 2
-            };
-        }
+    function newPetal() {
+        const cfg = themeConfig[currentScene] || themeConfig.default;
+        const isPurple = currentScene === 'purple';
+        return {
+            x: Math.random() * W,
+            y: -20 - Math.random() * 120,
+            size: 3 + Math.random() * 6,
+            vx: (Math.random() - 0.3) * 1.2,
+            vy: 0.6 + Math.random() * 1.5,
+            rot: Math.random() * Math.PI * 2,
+            rotV: (Math.random() - 0.5) * 0.04,
+            alpha: 0.35 + Math.random() * 0.55,
+            wobble: Math.random() * Math.PI * 2,
+            color: isPurple ? [200, 150, 255] : (currentScene === 'light' ? [255, 200, 220] : [255, 180, 200])
+        };
+    }
 
-        function drawSkyGradient(skyColors) {
-            const grad = actx.createLinearGradient(0, 0, 0, animeH);
-            grad.addColorStop(0, skyColors[0]);
-            grad.addColorStop(0.5, skyColors[1]);
-            grad.addColorStop(1, skyColors[2]);
-            actx.fillStyle = grad;
-            actx.fillRect(0, 0, animeW, animeH);
-        }
+    function drawSky(colors) {
+        const g = ctx.createLinearGradient(0, 0, 0, H);
+        g.addColorStop(0, colors[0]);
+        g.addColorStop(0.5, colors[1]);
+        g.addColorStop(1, colors[2]);
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, W, H);
+    }
 
-        function drawMoon() {
-            const cfg = themeConfig[currentAnimeScene];
-            if (!cfg || !cfg.moon) return;
-            const mx = animeW * 0.8, my = animeH * 0.15, mr = 35;
-            // Glow
-            const glow = actx.createRadialGradient(mx, my, mr * 0.5, mx, my, mr * 3);
-            glow.addColorStop(0, 'rgba(200,220,255,0.15)');
-            glow.addColorStop(1, 'rgba(200,220,255,0)');
-            actx.fillStyle = glow;
-            actx.beginPath(); actx.arc(mx, my, mr * 3, 0, Math.PI * 2); actx.fill();
-            // Moon body
-            actx.fillStyle = 'rgba(240,245,255,0.9)';
-            actx.beginPath(); actx.arc(mx, my, mr, 0, Math.PI * 2); actx.fill();
-            // Dark side
-            actx.fillStyle = 'rgba(10,15,40,0.5)';
-            actx.beginPath(); actx.arc(mx + 10, my - 5, mr * 0.85, 0, Math.PI * 2); actx.fill();
-        }
+    function drawMoon(time) {
+        const mx = W * 0.82, my = H * 0.12, mr = 32;
+        // Glow
+        const glow = ctx.createRadialGradient(mx, my, mr * 0.3, mx, my, mr * 3.5);
+        glow.addColorStop(0, 'rgba(200,220,255,0.2)');
+        glow.addColorStop(1, 'rgba(200,220,255,0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath(); ctx.arc(mx, my, mr * 3.5, 0, Math.PI * 2); ctx.fill();
+        // Body
+        ctx.fillStyle = 'rgba(240,245,255,0.92)';
+        ctx.beginPath(); ctx.arc(mx, my, mr, 0, Math.PI * 2); ctx.fill();
+        // Shadow
+        ctx.fillStyle = 'rgba(10,15,40,0.55)';
+        ctx.beginPath(); ctx.arc(mx + 10, my - 5, mr * 0.85, 0, Math.PI * 2); ctx.fill();
+    }
 
-        function drawSun() {
-            const cfg = themeConfig[currentAnimeScene];
-            if (!cfg || !cfg.sun) return;
-            const sx = animeW * 0.85, sy = animeH * 0.2, sr = 45;
-            // Glow
-            const glow = actx.createRadialGradient(sx, sy, sr * 0.3, sx, sy, sr * 4);
-            glow.addColorStop(0, 'rgba(255,200,100,0.25)');
-            glow.addColorStop(0.5, 'rgba(255,150,50,0.08)');
-            glow.addColorStop(1, 'rgba(255,100,30,0)');
-            actx.fillStyle = glow;
-            actx.beginPath(); actx.arc(sx, sy, sr * 4, 0, Math.PI * 2); actx.fill();
-            // Sun body
-            actx.fillStyle = 'rgba(255,220,120,0.9)';
-            actx.beginPath(); actx.arc(sx, sy, sr, 0, Math.PI * 2); actx.fill();
-        }
+    function drawSun(time) {
+        const sx = W * 0.85, sy = H * 0.18, sr = 40;
+        const pulse = Math.sin(time * 0.001) * 3;
+        const glow = ctx.createRadialGradient(sx, sy, sr * 0.2, sx, sy, (sr + pulse) * 4);
+        glow.addColorStop(0, 'rgba(255,220,120,0.3)');
+        glow.addColorStop(0.3, 'rgba(255,180,80,0.1)');
+        glow.addColorStop(1, 'rgba(255,100,30,0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath(); ctx.arc(sx, sy, (sr + pulse) * 4, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(255,230,140,0.95)';
+        ctx.beginPath(); ctx.arc(sx, sy, sr + pulse, 0, Math.PI * 2); ctx.fill();
+    }
 
-        function drawMountains(baseY) {
-            const cfg = themeConfig[currentAnimeScene];
-            const isDark = currentAnimeScene !== 'light';
-            // Mountain layer 1
-            actx.fillStyle = isDark ? 'rgba(15,25,15,0.7)' : 'rgba(60,120,80,0.5)';
-            actx.beginPath();
-            actx.moveTo(0, baseY);
-            for (let x = 0; x <= animeW; x += 3) {
-                const h = Math.sin(x * 0.003) * 60 + Math.sin(x * 0.007) * 30 + Math.sin(x * 0.001) * 80;
-                actx.lineTo(x, baseY - 120 - h);
+    function drawStarLayer(time) {
+        starList.forEach(s => {
+            const a = 0.3 + Math.sin(s.phase + time * s.speed) * 0.6;
+            ctx.fillStyle = `rgba(255,255,255,${Math.max(0, a)})`;
+            ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
+            if (s.r > 1.2 && a > 0.5) {
+                ctx.strokeStyle = `rgba(255,255,255,${a * 0.3})`;
+                ctx.lineWidth = 0.5;
+                ctx.beginPath(); ctx.moveTo(s.x - 5, s.y); ctx.lineTo(s.x + 5, s.y); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(s.x, s.y - 5); ctx.lineTo(s.x, s.y + 5); ctx.stroke();
             }
-            actx.lineTo(animeW, baseY); actx.closePath(); actx.fill();
-            // Mountain layer 2
-            actx.fillStyle = isDark ? 'rgba(10,20,10,0.85)' : 'rgba(40,90,60,0.6)';
-            actx.beginPath();
-            actx.moveTo(0, baseY);
-            for (let x = 0; x <= animeW; x += 3) {
-                const h = Math.sin(x * 0.005 + 1) * 40 + Math.sin(x * 0.01 + 2) * 20 + Math.sin(x * 0.002) * 50;
-                actx.lineTo(x, baseY - 60 - h);
+        });
+    }
+
+    function drawCloudLayer(time) {
+        const cfg = themeConfig[currentScene] || themeConfig.default;
+        clouds.forEach(c => {
+            c.x += c.speed;
+            if (c.x > W + c.w) c.x = -c.w * 2;
+            ctx.fillStyle = cfg.clouds;
+            ctx.globalAlpha = c.opacity;
+            ctx.beginPath();
+            ctx.ellipse(c.x, c.y, c.w * 0.5, c.h * 0.5, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(c.x - c.w * 0.25, c.y + c.h * 0.12, c.w * 0.35, c.h * 0.4, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(c.x + c.w * 0.28, c.y + c.h * 0.06, c.w * 0.32, c.h * 0.38, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 1;
+        });
+    }
+
+    function drawMountains(baseY, time) {
+        const isLight = currentScene === 'light';
+        // Far mountain
+        ctx.fillStyle = isLight ? 'rgba(80,130,170,0.3)' : 'rgba(20,30,50,0.5)';
+        ctx.beginPath(); ctx.moveTo(0, baseY);
+        for (let i = 0; i < farMountain.length && i * 3 <= W; i++) {
+            ctx.lineTo(i * 3, baseY - 160 - farMountain[i]);
+        }
+        ctx.lineTo(W, baseY); ctx.closePath(); ctx.fill();
+        // Mountain 1
+        ctx.fillStyle = isLight ? 'rgba(60,120,80,0.4)' : 'rgba(15,25,20,0.7)';
+        ctx.beginPath(); ctx.moveTo(0, baseY);
+        for (let i = 0; i < mountain1.length && i * 3 <= W; i++) {
+            ctx.lineTo(i * 3, baseY - 110 - mountain1[i]);
+        }
+        ctx.lineTo(W, baseY); ctx.closePath(); ctx.fill();
+        // Mountain 2
+        ctx.fillStyle = isLight ? 'rgba(40,100,60,0.5)' : 'rgba(10,20,12,0.85)';
+        ctx.beginPath(); ctx.moveTo(0, baseY);
+        for (let i = 0; i < mountain2.length && i * 3 <= W; i++) {
+            ctx.lineTo(i * 3, baseY - 55 - mountain2[i]);
+        }
+        ctx.lineTo(W, baseY); ctx.closePath(); ctx.fill();
+        // Trees
+        ctx.fillStyle = isLight ? 'rgba(30,75,40,0.65)' : 'rgba(5,15,5,0.95)';
+        ctx.beginPath(); ctx.moveTo(0, baseY);
+        const scale = W / 4000;
+        treeProfile.forEach(t => {
+            const px = t.x * scale;
+            if (px <= W) {
+                ctx.lineTo(px, baseY - t.h);
+                ctx.lineTo(px + 3 * scale, baseY - 4);
             }
-            actx.lineTo(animeW, baseY); actx.closePath(); actx.fill();
-            // Trees silhouette
-            actx.fillStyle = isDark ? 'rgba(5,15,5,0.95)' : 'rgba(30,70,40,0.7)';
-            actx.beginPath();
-            actx.moveTo(0, baseY);
-            for (let x = 0; x <= animeW; x += 8) {
-                const th = Math.random() * 15 + Math.sin(x * 0.05) * 10 + 15;
-                actx.lineTo(x, baseY - th - 10);
-                actx.lineTo(x + 4, baseY - 5);
+        });
+        ctx.lineTo(W, baseY); ctx.closePath(); ctx.fill();
+    }
+
+    function drawPetalLayer(time) {
+        petals.forEach(p => {
+            p.wobble += 0.018;
+            p.x += p.vx + Math.sin(p.wobble) * 0.9;
+            p.y += p.vy;
+            p.rot += p.rotV;
+            if (p.y > H + 30 || p.x < -60 || p.x > W + 60) {
+                Object.assign(p, newPetal());
+                p.y = -20;
             }
-            actx.lineTo(animeW, baseY); actx.closePath(); actx.fill();
-        }
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rot);
+            ctx.globalAlpha = p.alpha;
+            ctx.fillStyle = `rgba(${p.color[0]},${p.color[1]},${p.color[2]},0.85)`;
+            ctx.beginPath();
+            ctx.moveTo(0, -p.size);
+            ctx.bezierCurveTo(p.size * 0.8, -p.size * 0.4, p.size * 0.8, p.size * 0.4, 0, p.size);
+            ctx.bezierCurveTo(-p.size * 0.8, p.size * 0.4, -p.size * 0.8, -p.size * 0.4, 0, -p.size);
+            ctx.fill();
+            ctx.globalAlpha = 1;
+            ctx.restore();
+        });
+    }
 
-        function drawClouds() {
-            const cfg = themeConfig[currentAnimeScene] || themeConfig.default;
-            clouds.forEach(c => {
-                c.x += c.speed;
-                if (c.x > animeW + c.w) c.x = -c.w * 2;
-                actx.fillStyle = cfg.clouds;
-                actx.beginPath();
-                actx.ellipse(c.x, c.y, c.w * 0.5, c.h * 0.5, 0, 0, Math.PI * 2);
-                actx.fill();
-                actx.beginPath();
-                actx.ellipse(c.x - c.w * 0.25, c.y + c.h * 0.1, c.w * 0.35, c.h * 0.4, 0, 0, Math.PI * 2);
-                actx.fill();
-                actx.beginPath();
-                actx.ellipse(c.x + c.w * 0.25, c.y + c.h * 0.05, c.w * 0.3, c.h * 0.35, 0, 0, Math.PI * 2);
-                actx.fill();
-            });
-        }
+    function drawFireflyLayer(time) {
+        fireflyList.forEach(f => {
+            f.x += f.vx + Math.sin(f.phase) * 0.3;
+            f.y += f.vy + Math.cos(f.phase) * 0.2;
+            f.phase += f.speed;
+            if (f.x < 0) f.x = W; if (f.x > W) f.x = 0;
+            if (f.y < 0) f.y = H; if (f.y > H) f.y = 0;
+            const a = 0.3 + Math.sin(f.phase * 3) * 0.6;
+            const glow = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.r * 7);
+            glow.addColorStop(0, `rgba(160,255,100,${a * 0.5})`);
+            glow.addColorStop(1, 'rgba(160,255,100,0)');
+            ctx.fillStyle = glow;
+            ctx.beginPath(); ctx.arc(f.x, f.y, f.r * 7, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = `rgba(210,255,150,${a})`;
+            ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2); ctx.fill();
+        });
+    }
 
-        function drawPetals() {
-            petals.forEach(p => {
-                p.wobble += 0.02;
-                p.x += p.speedX + Math.sin(p.wobble) * 0.8;
-                p.y += p.speedY;
-                p.rotation += p.rotSpeed;
-                if (p.y > animeH + 20 || p.x < -50 || p.x > animeW + 50) {
-                    Object.assign(p, createPetal()); p.y = -20;
-                }
-                actx.save();
-                actx.translate(p.x, p.y);
-                actx.rotate(p.rotation);
-                actx.globalAlpha = p.opacity;
-                // Draw petal shape
-                actx.fillStyle = currentAnimeScene === 'purple' ? 'rgba(200,150,255,0.8)' : 'rgba(255,180,200,0.8)';
-                actx.beginPath();
-                actx.moveTo(0, -p.size);
-                actx.bezierCurveTo(p.size * 0.8, -p.size * 0.5, p.size * 0.8, p.size * 0.5, 0, p.size);
-                actx.bezierCurveTo(-p.size * 0.8, p.size * 0.5, -p.size * 0.8, -p.size * 0.5, 0, -p.size);
-                actx.fill();
-                actx.globalAlpha = 1;
-                actx.restore();
-            });
-        }
-
-        function drawStars() {
-            starsArr.forEach(s => {
-                s.twinkle += s.speed;
-                const alpha = 0.3 + Math.sin(s.twinkle) * 0.5;
-                actx.fillStyle = `rgba(255,255,255,${Math.max(0, alpha)})`;
-                actx.beginPath(); actx.arc(s.x, s.y, s.r, 0, Math.PI * 2); actx.fill();
-                // Cross sparkle
-                if (s.r > 1.2 && alpha > 0.5) {
-                    actx.strokeStyle = `rgba(255,255,255,${alpha * 0.3})`;
-                    actx.lineWidth = 0.5;
-                    actx.beginPath(); actx.moveTo(s.x - 4, s.y); actx.lineTo(s.x + 4, s.y); actx.stroke();
-                    actx.beginPath(); actx.moveTo(s.x, s.y - 4); actx.lineTo(s.x, s.y + 4); actx.stroke();
-                }
-            });
-        }
-
-        function drawFireflies() {
-            firefliesArr.forEach(f => {
-                f.x += f.vx + Math.sin(f.phase) * 0.3;
-                f.y += f.vy + Math.cos(f.phase) * 0.2;
-                f.phase += f.speed;
-                if (f.x < 0) f.x = animeW; if (f.x > animeW) f.x = 0;
-                if (f.y < 0) f.y = animeH; if (f.y > animeH) f.y = 0;
-                const alpha = 0.3 + Math.sin(f.phase * 3) * 0.5;
-                // Glow
-                const glow = actx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.r * 6);
-                glow.addColorStop(0, `rgba(150,255,100,${alpha * 0.5})`);
-                glow.addColorStop(1, 'rgba(150,255,100,0)');
-                actx.fillStyle = glow;
-                actx.beginPath(); actx.arc(f.x, f.y, f.r * 6, 0, Math.PI * 2); actx.fill();
-                // Core
-                actx.fillStyle = `rgba(200,255,150,${alpha})`;
-                actx.beginPath(); actx.arc(f.x, f.y, f.r, 0, Math.PI * 2); actx.fill();
-            });
-        }
-
-        function drawAnimeFrame() {
-            const cfg = themeConfig[currentAnimeScene] || themeConfig.default;
-            // Sky
-            drawSkyGradient(cfg.sky);
-            // Sun or Moon
-            if (cfg.moon) drawMoon();
-            if (cfg.sun) drawSun();
-            // Stars
-            if (cfg.stars) drawStars();
-            // Clouds
-            drawClouds();
-            // Mountains & trees
-            drawMountains(animeH * 0.78);
-            // Ground
-            const isDark = currentAnimeScene !== 'light';
-            actx.fillStyle = isDark ? 'rgba(5,12,5,0.95)' : 'rgba(50,120,60,0.8)';
-            actx.fillRect(0, animeH * 0.82, animeW, animeH * 0.18);
-            // Grass blades
-            actx.strokeStyle = isDark ? 'rgba(30,60,30,0.6)' : 'rgba(80,160,80,0.5)';
-            actx.lineWidth = 1;
-            for (let x = 0; x < animeW; x += 6) {
-                const h = 8 + Math.sin(x * 0.1 + performance.now() * 0.001) * 4;
-                actx.beginPath(); actx.moveTo(x, animeH * 0.82); actx.lineTo(x + 2, animeH * 0.82 - h); actx.stroke();
+    function drawWaves(time) {
+        const t = time * 0.001;
+        ctx.strokeStyle = 'rgba(100,200,255,0.18)';
+        ctx.lineWidth = 1.5;
+        for (let i = 0; i < 6; i++) {
+            ctx.beginPath();
+            for (let x = 0; x < W; x += 3) {
+                const y = H * 0.83 + i * 10 + Math.sin(x * 0.008 + t + i * 1.2) * 5;
+                x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
             }
-            // Sakura petals
-            if (cfg.sakura) drawPetals();
-            // Fireflies
-            if (cfg.fireflies) drawFireflies();
-            // Water reflection for ocean theme
-            if (cfg.waves) {
-                actx.fillStyle = 'rgba(0,30,60,0.6)';
-                actx.fillRect(0, animeH * 0.82, animeW, animeH * 0.18);
-                const t = performance.now() * 0.001;
-                actx.strokeStyle = 'rgba(100,200,255,0.15)';
-                actx.lineWidth = 1.5;
-                for (let i = 0; i < 5; i++) {
-                    actx.beginPath();
-                    for (let x = 0; x < animeW; x += 3) {
-                        const y = animeH * 0.83 + i * 12 + Math.sin(x * 0.01 + t + i) * 4;
-                        x === 0 ? actx.moveTo(x, y) : actx.lineTo(x, y);
-                    }
-                    actx.stroke();
-                }
-            }
-            requestAnimationFrame(drawAnimeFrame);
+            ctx.stroke();
         }
+    }
 
-        function setTheme(theme) {
+    function drawFrame(time) {
+        const cfg = themeConfig[currentScene] || themeConfig.default;
+        drawSky(cfg.sky);
+        if (cfg.moon) drawMoon(time);
+        if (cfg.sun) drawSun(time);
+        if (cfg.stars) drawStarLayer(time);
+        drawCloudLayer(time);
+        const baseY = H * 0.78;
+        drawMountains(baseY, time);
+        // Ground
+        const isLight = currentScene === 'light';
+        ctx.fillStyle = isLight ? 'rgba(50,120,60,0.7)' : 'rgba(5,12,5,0.95)';
+        ctx.fillRect(0, baseY + 2, W, H - baseY);
+        // Grass
+        ctx.strokeStyle = isLight ? 'rgba(80,160,80,0.4)' : 'rgba(30,60,30,0.5)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < W; x += 7) {
+            const gh = 6 + Math.sin(x * 0.1 + time * 0.0015) * 4;
+            ctx.beginPath(); ctx.moveTo(x, baseY + 2); ctx.lineTo(x + 2, baseY + 2 - gh); ctx.stroke();
+        }
+        if (cfg.sakura) drawPetalLayer(time);
+        if (cfg.fireflies) drawFireflyLayer(time);
+        if (cfg.waves) {
+            ctx.fillStyle = 'rgba(0,30,60,0.5)';
+            ctx.fillRect(0, baseY + 2, W, H - baseY);
+            drawWaves(time);
+        }
+        requestAnimationFrame(drawFrame);
+    }
+
+    // ==================== Theme Switcher ====================
+    const themeBtn = document.getElementById('themeBtn');
+    const themePanel = document.getElementById('themePanel');
+
+    themeBtn.addEventListener('click', () => themePanel.classList.toggle('show'));
+
+    document.querySelectorAll('.theme-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+            const theme = opt.dataset.theme;
             currentTheme = theme;
+            currentScene = theme;
             localStorage.setItem('theme', theme);
-            const body = document.body;
-            body.className = theme === 'default' ? '' : 'theme-' + theme;
-            
-            const config = themeConfig[theme];
-            document.getElementById('video-overlay').style.background = config.overlay;
-            
-            document.querySelectorAll('.theme-option').forEach(opt => {
-                opt.classList.toggle('active', opt.dataset.theme === theme);
-            });
-            
-            updateParticleColor(config.particleColor);
-            currentAnimeScene = theme;
-            initAnimeScene();
-        }
-
-        function toggleThemePanel() {
-            document.getElementById('theme-options').classList.toggle('show');
-        }
-
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('#theme-panel')) {
-                document.getElementById('theme-options').classList.remove('show');
-            }
+            initScene();
+            document.querySelectorAll('.theme-option').forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+            themePanel.classList.remove('show');
         });
+    });
 
-        // ==================== Daily Quote ====================
-        const happyQuotes = [
-            { text: '每一天都是新的开始，微笑面对生活！', author: '—— 快乐每一天', emoji: '😊' },
-            { text: '生活不是等待暴风雨过去，而是学会在雨中跳舞。', author: '—— 维维安·格林', emoji: '💃' },
-            { text: '快乐不是因为拥有的多，而是因为计较的少。', author: '—— 佚名', emoji: '🌻' },
-            { text: '今天的你，是昨天的你决定的；明天的你，由今天的你创造。', author: '—— 正能量语录', emoji: '🌟' },
-            { text: '保持热爱，奔赴下一场山海。', author: '—— 佚名', emoji: '⛰️' },
-            { text: '生活明朗，万物可爱，人间值得，未来可期。', author: '—— 佚名', emoji: '🌈' },
-            { text: '你笑起来真好看，像春天的花一样。', author: '—— 佚名', emoji: '🌸' },
-            { text: '每天进步一点点，就是最好的人生策略。', author: '—— 佚名', emoji: '📈' },
-            { text: '世界上只有一种英雄主义，就是认清生活的真相后依然热爱生活。', author: '—— 罗曼·罗兰', emoji: '🦸' },
-            { text: '做自己生命的主角，而非别人生命的看客。', author: '—— 佚名', emoji: '🎬' },
-            { text: '阳光总在风雨后，请相信有彩虹。', author: '—— 佚名', emoji: '🌈' },
-            { text: '把每一天当成最后一天来过，有一天你会发现你是对的。', author: '—— 史蒂夫·乔布斯', emoji: '🍎' },
-            { text: '生活就像骑自行车，想保持平衡就得往前走。', author: '—— 阿尔伯特·爱因斯坦', emoji: '🚲' },
-            { text: '你今天的努力，是幸运的伏笔。', author: '—— 佚名', emoji: '🍀' },
-            { text: '做一个温暖的人，不求大富大贵，只求生活简单快乐。', author: '—— 佚名', emoji: '☀️' },
-            { text: '人生没有彩排，每天都是现场直播。', author: '—— 佚名', emoji: '📺' },
-            { text: '梦想不会逃跑，逃跑的永远是自己。', author: '—— 佚名', emoji: '🏃' },
-            { text: '努力的意义，就是以后的日子里，放眼望去全部都是自己喜欢的人和事。', author: '—— 佚名', emoji: '💪' },
-            { text: '愿你一生努力，一生被爱。', author: '—— 佚名', emoji: '❤️' },
-            { text: '所谓万丈深渊，下去也是前程万里。', author: '—— 木心', emoji: '🏔️' }
-        ];
+    // Set initial theme selection
+    document.querySelectorAll('.theme-option').forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.theme === currentTheme);
+    });
 
-        function showDailyQuote() {
-            const index = Math.floor(Math.random() * happyQuotes.length);
-            const quote = happyQuotes[index];
-            document.getElementById('quote-text').textContent = quote.text;
-            document.getElementById('quote-author').textContent = quote.author;
-            document.getElementById('quote-emoji').textContent = quote.emoji;
-            document.getElementById('daily-quote-inline').textContent = '💡 ' + quote.text;
-            setTimeout(() => { document.getElementById('daily-quote-overlay').classList.add('show'); }, 1200);
+    // Close panel on outside click
+    document.addEventListener('click', (e) => {
+        if (!themeBtn.contains(e.target) && !themePanel.contains(e.target)) {
+            themePanel.classList.remove('show');
         }
-        function closeQuote(e) { if (e.target === document.getElementById('daily-quote-overlay')) document.getElementById('daily-quote-overlay').classList.remove('show'); }
-        function closeQuoteBtn() { document.getElementById('daily-quote-overlay').classList.remove('show'); }
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') document.getElementById('daily-quote-overlay').classList.remove('show'); });
+    });
 
-        // ==================== Loading ====================
-        window.addEventListener('load', () => {
-            setTheme(currentTheme);
-            initAnimeScene();
-            drawAnimeFrame();
-            setTimeout(() => { document.getElementById('loading-screen').classList.add('hidden'); showDailyQuote(); }, 800);
+    // ==================== Daily Quotes ====================
+    const happyQuotes = [
+        '生活不止眼前的代码，还有远方的 bug。',
+        '今天也是充满希望的一天！加油！',
+        '每一次努力都是在为未来铺路。',
+        '保持热爱，奔赴山海！',
+        '你的笑容，是最好的晴天。',
+        '生活明朗，万物可爱。',
+        '愿你所有快乐，无需假装。',
+        '今天的心情是五颜六色的。',
+        '慢慢来，一切都是最好的安排。',
+        '把每天当成最后一天来过，你就不会浪费时间了。',
+        '生活需要仪式感，就像平凡的日子需要一束光。',
+        '你已经很棒了，继续努力！',
+        '幸福不是因为拥有的多，而是计较的少。',
+        '今天又是元气满满的一天！',
+        '做自己喜欢的事，让喜欢的事有价值。',
+        '人生没有彩排，每天都是现场直播。',
+        '你现在的努力，是未来的伏笔。',
+        '不要因为走得太远，而忘记为什么出发。',
+        '最好的状态是未来可期。',
+        '每一天都是新的开始！',
+        '阳光总在风雨后，保持微笑。',
+        '努力的意义是让未来的自己感谢现在的自己。',
+        '相信自己，你比想象中更强大。',
+        '今天也要开心哦！',
+        '生活就像骑自行车，想保持平衡就得往前走。'
+    ];
+    let lastQuote = -1;
+    function showDailyQuote() {
+        let idx;
+        do { idx = Math.floor(Math.random() * happyQuotes.length); } while (idx === lastQuote);
+        lastQuote = idx;
+        document.getElementById('quoteText').textContent = happyQuotes[idx];
+    }
+
+    // ==================== Navigation ====================
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('nav ul li a');
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const top = section.offsetTop;
+            if (pageYOffset >= top - 200) current = section.getAttribute('id');
         });
-
-        // ==================== Particles ====================
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [], mouseX = 0, mouseY = 0;
-        let particleColorStr = '0, 212, 255';
-
-        function updateParticleColor(c) { particleColorStr = c; }
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
-
-        class Particle {
-            constructor() { this.reset(); }
-            reset() {
-                this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
-                this.radius = Math.random() * 2 + 0.5; this.opacity = Math.random() * 0.5 + 0.2;
-            }
-            update() {
-                this.x += this.vx; this.y += this.vy;
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-            draw() {
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${particleColorStr}, ${this.opacity})`; ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            const count = Math.min(80, Math.floor((canvas.width * canvas.height) / 15000));
-            for (let i = 0; i < count; i++) particles.push(new Particle());
-        }
-
-        function drawLines() {
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 150) {
-                        ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(${particleColorStr}, ${0.1 * (1 - dist / 150)})`; ctx.lineWidth = 0.5; ctx.stroke();
-                    }
-                }
-                const mdx = particles[i].x - mouseX, mdy = particles[i].y - mouseY;
-                const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
-                if (mdist < 200) {
-                    ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(mouseX, mouseY);
-                    ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 * (1 - mdist / 200)})`; ctx.lineWidth = 0.8; ctx.stroke();
-                }
-            }
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            drawLines();
-            requestAnimationFrame(animateParticles);
-        }
-        initParticles();
-        animateParticles();
-
-        // ==================== Typewriter ====================
-        const typewriterTexts = ['售前售后客服', '销售精英', '云计算技术应用', 'Linux 运维工程师', '团队协作者'];
-        let typewriterIndex = 0, charIndex = 0, isDeleting = false;
-        const typewriterEl = document.getElementById('typewriter');
-        function typeWriter() {
-            const currentText = typewriterTexts[typewriterIndex];
-            if (isDeleting) { typewriterEl.textContent = currentText.substring(0, charIndex - 1); charIndex--; }
-            else { typewriterEl.textContent = currentText.substring(0, charIndex + 1); charIndex++; }
-            let speed = isDeleting ? 50 : 100;
-            if (!isDeleting && charIndex === currentText.length) { speed = 2000; isDeleting = true; }
-            else if (isDeleting && charIndex === 0) { isDeleting = false; typewriterIndex = (typewriterIndex + 1) % typewriterTexts.length; speed = 500; }
-            setTimeout(typeWriter, speed);
-        }
-        typeWriter();
-
-        // ==================== Navbar ====================
-        const navbar = document.getElementById('navbar');
-        const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('.nav-links a');
-        window.addEventListener('scroll', () => {
-            navbar.classList.toggle('scrolled', window.scrollY > 50);
-            let current = '';
-            sections.forEach(section => { if (window.scrollY >= section.offsetTop - 100) current = section.getAttribute('id'); });
-            navLinks.forEach(link => { link.classList.toggle('active', link.getAttribute('href') === '#' + current); });
-            document.getElementById('back-to-top').classList.toggle('visible', window.scrollY > 300);
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) link.classList.add('active');
         });
+    });
 
-        // ==================== Scroll Animations ====================
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
-                        setTimeout(() => { bar.style.width = bar.getAttribute('data-width') + '%'; }, 200);
-                    });
-                    entry.target.querySelectorAll('.stat-number').forEach(counter => {
-                        if (counter.dataset.animated) return;
-                        counter.dataset.animated = 'true';
-                        const target = parseInt(counter.getAttribute('data-target'));
-                        const start = performance.now();
-                        function updateCounter(now) {
-                            const progress = Math.min((now - start) / 2000, 1);
-                            const eased = 1 - Math.pow(1 - progress, 3);
-                            counter.textContent = Math.floor(target * eased);
-                            if (progress < 1) requestAnimationFrame(updateCounter);
-                            else counter.textContent = target;
-                        }
-                        requestAnimationFrame(updateCounter);
-                    });
-                }
-            });
-        }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
-        document.querySelectorAll('.animate-on-scroll, .animate-left, .animate-right').forEach(el => observer.observe(el));
-
-        // ==================== Utils ====================
-        function toggleMenu() { document.getElementById('navLinks').classList.toggle('open'); }
-        document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
-        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-        function handleSend() { alert('感谢您的关注！由于这是一个静态网站，消息功能暂不可用。\n请直接通过电话或邮箱联系我：\n📱 177-6289-2519\n📧 1735456860@qq.com'); }
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        });
+    // ==================== Init ====================
+    resize();
+    initScene();
+    requestAnimationFrame(drawFrame);
+    showDailyQuote();
+    window.addEventListener('resize', () => { resize(); initScene(); });
     </script>
 </body>
 </html>
