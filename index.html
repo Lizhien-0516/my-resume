@@ -372,28 +372,6 @@
             text-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
 
-        /* ==================== Mouse hint ==================== */
-        .mouse-hint {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255,255,255,0.65);
-            backdrop-filter: blur(8px);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            color: #7a6a5a;
-            z-index: 50;
-            border: 1px solid rgba(180,160,140,0.15);
-            animation: fadeInUp 1s ease 2s both;
-            pointer-events: none;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateX(-50%) translateY(10px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-
         /* ==================== Responsive ==================== */
         @media (max-width: 600px) {
             .intro-title { font-size: 3rem; letter-spacing: 6px; }
@@ -589,8 +567,6 @@
             <p>© 2025 严小军 | 个人简历网站</p>
         </footer>
     </div>
-
-    <div class="mouse-hint">🌸 移动鼠标会有花瓣飘落哦~</div>
 
     <script>
     // ==================== Intro Screen Morph ====================
