@@ -1792,10 +1792,8 @@
         ];
 
         function showDailyQuote() {
-            // 根据当前日期生成确定性索引（同一天显示相同名言）
-            const today = new Date();
-            const dateKey = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-            const index = dateKey % happyQuotes.length;
+            // 每次随机显示一条名言
+            const index = Math.floor(Math.random() * happyQuotes.length);
             const quote = happyQuotes[index];
 
             document.getElementById('quote-text').textContent = quote.text;
