@@ -6,28 +6,84 @@
     <title>严小军 - 个人简历</title>
     <style>
         :root {
-            --primary: #3a7bd5;
-            --primary-dark: #2c5faa;
-            --accent: #e8a0bf;
-            --text: #2c3e50;
-            --text-light: #5a6a7a;
+            --primary: #4a7ab5;
+            --primary-dark: #3a6299;
+            --accent: #d4899e;
+            --text: #3b3028;
+            --text-light: #5c5048;
             --card-bg: rgba(255, 255, 255, 0.72);
             --card-hover: rgba(255, 255, 255, 0.88);
-            --border: rgba(58, 123, 213, 0.15);
-            --shadow: 0 8px 32px rgba(100, 140, 200, 0.15);
+            --border: rgba(160, 130, 100, 0.2);
+            --shadow: 0 8px 32px rgba(80, 60, 40, 0.12);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: #e8f0f8;
+            background: #d4c8b8;
             color: var(--text);
             line-height: 1.7;
             overflow-x: hidden;
             min-height: 100vh;
         }
 
-        /* Background Image */
+        /* ==================== Intro Screen ==================== */
+        .intro-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 9999;
+            background: url('preview.jpg') center center / cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .intro-screen.hiding {
+            opacity: 0;
+            transform: scale(1.05);
+            pointer-events: none;
+        }
+        .intro-screen.hidden {
+            display: none;
+        }
+        .intro-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.35);
+        }
+        .intro-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            animation: introFloat 3s ease-in-out infinite;
+        }
+        @keyframes introFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        .intro-title {
+            font-size: 5rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.4), 0 2px 10px rgba(0,0,0,0.3);
+            letter-spacing: 12px;
+            margin-bottom: 16px;
+        }
+        .intro-hint {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.8);
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            animation: blink 2s ease-in-out infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ==================== Background ==================== */
         .bg-image {
             position: fixed;
             top: 0; left: 0;
@@ -35,8 +91,6 @@
             z-index: -3;
             background: url('preview.jpg') center center / cover no-repeat;
         }
-
-        /* Dynamic particle overlay canvas */
         #particle-canvas {
             position: fixed;
             top: 0; left: 0;
@@ -44,13 +98,12 @@
             z-index: -1;
             pointer-events: none;
         }
-
         .content-wrapper {
             position: relative;
             z-index: 1;
         }
 
-        /* Header */
+        /* ==================== Header ==================== */
         header {
             padding: 90px 20px 45px;
             text-align: center;
@@ -58,16 +111,17 @@
         .avatar {
             width: 120px; height: 120px;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(58,123,213,0.25), rgba(232,160,191,0.25));
-            border: 3px solid rgba(255,255,255,0.7);
+            background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.3));
+            border: 3px solid rgba(255,255,255,0.6);
             margin: 0 auto 22px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 48px;
-            color: var(--primary);
+            font-size: 44px;
+            color: #fff;
             font-weight: 700;
-            box-shadow: 0 4px 20px rgba(100,140,200,0.2);
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 24px rgba(80,60,40,0.2);
             animation: float 4s ease-in-out infinite;
             backdrop-filter: blur(6px);
         }
@@ -77,29 +131,30 @@
         }
         header h1 {
             font-size: 2.6rem;
-            color: var(--primary);
+            color: #fff;
             margin-bottom: 8px;
-            text-shadow: 0 2px 8px rgba(255,255,255,0.6);
+            text-shadow: 0 2px 12px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.3);
         }
         header .subtitle {
             font-size: 1.1rem;
-            color: var(--text-light);
+            color: rgba(255,255,255,0.88);
             margin-bottom: 8px;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.3);
         }
         .daily-quote {
             margin-top: 18px;
             padding: 13px 22px;
-            background: rgba(255, 255, 255, 0.65);
-            border: 1px solid rgba(58,123,213,0.15);
+            background: rgba(255, 255, 255, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: 12px;
             display: inline-block;
             max-width: 500px;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
         }
-        .daily-quote .label { font-size: 0.8rem; color: var(--primary); margin-bottom: 3px; font-weight: 600; }
+        .daily-quote .label { font-size: 0.8rem; color: #6a4a2a; margin-bottom: 3px; font-weight: 600; }
         .daily-quote .text {
             font-size: 0.93rem;
-            color: var(--text-light);
+            color: #5a4a3a;
             font-style: italic;
             line-height: 1.6;
         }
@@ -111,32 +166,31 @@
             flex-wrap: wrap;
         }
         .contact-links a {
-            color: var(--text);
+            color: #3b3028;
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 6px;
             padding: 9px 16px;
-            background: rgba(255,255,255,0.6);
-            border: 1px solid rgba(58,123,213,0.15);
+            background: rgba(255,255,255,0.55);
+            border: 1px solid rgba(255,255,255,0.4);
             border-radius: 25px;
             font-size: 0.88rem;
             transition: all 0.3s;
             backdrop-filter: blur(6px);
         }
         .contact-links a:hover {
-            background: rgba(255,255,255,0.85);
-            border-color: rgba(58,123,213,0.3);
+            background: rgba(255,255,255,0.8);
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(100,140,200,0.15);
+            box-shadow: 0 4px 15px rgba(80,60,40,0.15);
         }
 
-        /* Navigation */
+        /* ==================== Navigation ==================== */
         nav {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);
             backdrop-filter: blur(15px);
-            border-top: 1px solid rgba(58,123,213,0.08);
-            border-bottom: 1px solid rgba(58,123,213,0.08);
+            border-top: 1px solid rgba(180,160,140,0.15);
+            border-bottom: 1px solid rgba(180,160,140,0.15);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -152,7 +206,7 @@
         nav ul li a {
             display: block;
             padding: 15px 20px;
-            color: var(--text-light);
+            color: #6a5a4a;
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s;
@@ -160,12 +214,12 @@
             font-size: 0.95rem;
         }
         nav ul li a:hover, nav ul li a.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-            background: rgba(58,123,213,0.04);
+            color: #3a6299;
+            border-bottom-color: #4a7ab5;
+            background: rgba(74,122,181,0.05);
         }
 
-        /* Main */
+        /* ==================== Main ==================== */
         main {
             max-width: 860px;
             margin: 0 auto;
@@ -174,17 +228,17 @@
         section { margin-bottom: 50px; }
         .section-title {
             font-size: 1.8rem;
-            color: var(--primary);
+            color: #4a6a90;
             margin-bottom: 22px;
             padding-bottom: 10px;
-            border-bottom: 2px solid rgba(58,123,213,0.15);
+            border-bottom: 2px solid rgba(74,106,144,0.2);
             display: flex;
             align-items: center;
             gap: 10px;
         }
         .section-title .icon { font-size: 1.5rem; }
 
-        /* Cards */
+        /* ==================== Cards ==================== */
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -198,11 +252,11 @@
             background: var(--card-hover);
             transform: translateY(-2px);
             box-shadow: var(--shadow);
-            border-color: rgba(58,123,213,0.25);
+            border-color: rgba(120,100,80,0.25);
         }
 
-        /* About */
-        .about-text { font-size: 0.98rem; margin-bottom: 18px; line-height: 1.85; color: var(--text); }
+        /* ==================== About ==================== */
+        .about-text { font-size: 0.98rem; margin-bottom: 18px; line-height: 1.85; color: #4a4038; }
         .about-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -213,46 +267,21 @@
             align-items: center;
             gap: 10px;
             padding: 13px;
-            background: rgba(58,123,213,0.04);
+            background: rgba(74,122,181,0.06);
             border-radius: 10px;
-            border: 1px solid rgba(58,123,213,0.08);
+            border: 1px solid rgba(74,122,181,0.1);
         }
         .about-item .icon { font-size: 1.3rem; }
-        .about-item .label { font-size: 0.78rem; color: var(--text-light); }
-        .about-item .value { font-weight: 600; font-size: 0.93rem; }
+        .about-item .label { font-size: 0.78rem; color: #7a6a5a; }
+        .about-item .value { font-weight: 600; font-size: 0.93rem; color: #3b3028; }
 
-        /* Education Timeline */
-        .timeline { position: relative; padding-left: 35px; }
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 12px; top: 0; bottom: 0;
-            width: 3px;
-            background: linear-gradient(180deg, var(--primary), var(--accent));
-            border-radius: 2px;
-        }
-        .timeline-item { position: relative; margin-bottom: 22px; }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -29px; top: 8px;
-            width: 14px; height: 14px;
-            background: var(--primary);
-            border-radius: 50%;
-            border: 3px solid rgba(255,255,255,0.9);
-            box-shadow: 0 0 8px rgba(58,123,213,0.3);
-        }
-        .timeline-date {
-            font-size: 0.86rem;
-            color: var(--primary);
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-        .timeline-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 3px; }
-        .timeline-subtitle { color: var(--text-light); margin-bottom: 8px; font-size: 0.93rem; }
-        .desc { color: var(--text-light); font-size: 0.93rem; line-height: 1.8; }
+        /* ==================== Experience Cards (shared style) ==================== */
+        .exp-card { border-left: 3px solid #4a7ab5; }
+        .exp-card h3 { font-size: 1.15rem; margin-bottom: 4px; color: #3b3028; }
+        .exp-card .role { color: #4a7ab5; font-weight: 600; margin-bottom: 8px; font-size: 0.93rem; }
+        .exp-card .desc { color: #6a5a4a; font-size: 0.93rem; line-height: 1.8; }
 
-        /* Skills */
+        /* ==================== Skills ==================== */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -267,7 +296,7 @@
             transition: all 0.3s;
         }
         .skill-card:hover {
-            border-color: rgba(58,123,213,0.25);
+            border-color: rgba(120,100,80,0.25);
             transform: translateY(-2px);
         }
         .skill-card h3 {
@@ -276,6 +305,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            color: #3b3028;
         }
         .skill-bar { margin-bottom: 12px; }
         .skill-bar-header {
@@ -283,80 +313,52 @@
             justify-content: space-between;
             margin-bottom: 5px;
             font-size: 0.86rem;
+            color: #5c5048;
         }
         .skill-bar-bg {
             height: 7px;
-            background: rgba(58,123,213,0.1);
+            background: rgba(74,122,181,0.12);
             border-radius: 4px;
             overflow: hidden;
         }
         .skill-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
+            background: linear-gradient(90deg, #4a7ab5, #d4899e);
             border-radius: 4px;
             transition: width 1.2s ease-out;
         }
         .skill-note {
             font-size: 0.8rem;
-            color: var(--text-light);
+            color: #7a6a5a;
             margin-top: 5px;
         }
 
-        /* Experience */
-        .exp-card { border-left: 3px solid var(--primary); }
-        .exp-card h3 { font-size: 1.15rem; margin-bottom: 4px; }
-        .exp-card .role { color: var(--primary); font-weight: 600; margin-bottom: 8px; font-size: 0.93rem; }
-        .exp-card .desc { color: var(--text-light); font-size: 0.93rem; line-height: 1.8; }
-
-        /* Honors */
-        .honors-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-            gap: 12px;
-        }
-        .honor-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 16px;
-            background: rgba(58,123,213,0.03);
-            border-radius: 12px;
-            border: 1px solid rgba(58,123,213,0.08);
-            transition: all 0.3s;
-        }
-        .honor-item:hover {
-            background: rgba(58,123,213,0.06);
-            border-color: rgba(58,123,213,0.18);
-        }
-        .honor-item .emoji { font-size: 1.7rem; }
-        .honor-item h4 { font-size: 0.98rem; margin-bottom: 3px; }
-        .honor-item p { font-size: 0.83rem; color: var(--text-light); }
-
-        /* Footer */
+        /* ==================== Footer ==================== */
         footer {
             text-align: center;
             padding: 28px 20px;
-            color: var(--text-light);
+            color: rgba(255,255,255,0.75);
             font-size: 0.86rem;
-            border-top: 1px solid rgba(58,123,213,0.1);
-            background: rgba(255,255,255,0.3);
+            border-top: 1px solid rgba(255,255,255,0.15);
+            background: rgba(0, 0, 0, 0.15);
             backdrop-filter: blur(6px);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
 
-        /* Mouse trail hint */
+        /* ==================== Mouse hint ==================== */
         .mouse-hint {
             position: fixed;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.65);
             backdrop-filter: blur(8px);
             padding: 6px 16px;
             border-radius: 20px;
             font-size: 0.78rem;
-            color: var(--text-light);
+            color: #7a6a5a;
             z-index: 50;
-            border: 1px solid rgba(58,123,213,0.1);
+            border: 1px solid rgba(180,160,140,0.15);
             animation: fadeInUp 1s ease 2s both;
             pointer-events: none;
         }
@@ -365,8 +367,9 @@
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
 
-        /* Responsive */
+        /* ==================== Responsive ==================== */
         @media (max-width: 600px) {
+            .intro-title { font-size: 3rem; letter-spacing: 6px; }
             header h1 { font-size: 1.9rem; }
             nav ul { justify-content: flex-start; overflow-x: auto; padding: 0 10px; }
             nav ul li a { padding: 12px 14px; font-size: 0.86rem; white-space: nowrap; }
@@ -376,10 +379,17 @@
     </style>
 </head>
 <body>
+    <!-- ==================== Intro Screen ==================== -->
+    <div class="intro-screen" id="introScreen">
+        <div class="intro-overlay"></div>
+        <div class="intro-content">
+            <div class="intro-title">Resume</div>
+            <div class="intro-hint">✨ 点击进入 ✨</div>
+        </div>
+    </div>
+
     <!-- Background Image -->
     <div class="bg-image"></div>
-
-    <!-- Particle Canvas (floating leaves + mouse trail petals) -->
     <canvas id="particle-canvas"></canvas>
 
     <div class="content-wrapper">
@@ -438,13 +448,10 @@
 
             <section id="education">
                 <h2 class="section-title"><span class="icon">🎓</span> 教育经历</h2>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-date">2023.09 - 2026.06</div>
-                        <h3 class="timeline-title">湖北科技职业学院</h3>
-                        <p class="timeline-subtitle">云计算技术应用 / 专科</p>
-                        <p class="desc">主修课程：云计算导论、计算机网络技术、Linux 系统应用、Python 程序设计、数据库技术（MySQL）、虚拟化技术与应用、OpenStack 技术与应用、私有云基础架构与运维等。</p>
-                    </div>
+                <div class="card exp-card">
+                    <h3>🏫 湖北科技职业学院</h3>
+                    <p class="role">云计算技术应用 / 专科 | 2023.09 - 2026.06</p>
+                    <p class="desc">主修课程：云计算导论、计算机网络技术、Linux 系统应用、Python 程序设计、数据库技术（MySQL）、虚拟化技术与应用、OpenStack 技术与应用、私有云基础架构与运维等。</p>
                 </div>
             </section>
 
@@ -523,27 +530,30 @@
 
             <section id="honors">
                 <h2 class="section-title"><span class="icon">🎖️</span> 荣誉证书</h2>
-                <div class="honors-grid">
-                    <div class="honor-item">
-                        <span class="emoji">🏅</span>
-                        <div><h4>国家励志奖学金</h4><p>学习态度端正、成绩优异，兼顾学业与综合素质发展</p></div>
-                    </div>
-                    <div class="honor-item">
-                        <span class="emoji">⭐</span>
-                        <div><h4>校级"励志之星"</h4><p>严于律己、积极进取，树立优秀学生榜样</p></div>
-                    </div>
-                    <div class="honor-item">
-                        <span class="emoji">🎤</span>
-                        <div><h4>校级"优秀主讲人"</h4><p>语言表达能力强，逻辑清晰、台风稳健</p></div>
-                    </div>
-                    <div class="honor-item">
-                        <span class="emoji">🌟</span>
-                        <div><h4>校级"优秀实践个人"</h4><p>积极参与实践活动，认真负责、踏实肯干</p></div>
-                    </div>
-                    <div class="honor-item">
-                        <span class="emoji">💻</span>
-                        <div><h4>WPS 计算机二级</h4><p>熟练掌握办公软件操作技能</p></div>
-                    </div>
+                <div class="card exp-card">
+                    <h3>🏅 国家励志奖学金</h3>
+                    <p class="role">国家级荣誉</p>
+                    <p class="desc">学习态度端正、成绩优异，兼顾学业与综合素质发展。</p>
+                </div>
+                <div class="card exp-card">
+                    <h3>⭐ 校级"励志之星"</h3>
+                    <p class="role">个人荣誉</p>
+                    <p class="desc">严于律己、积极进取，树立优秀学生榜样。</p>
+                </div>
+                <div class="card exp-card">
+                    <h3>🎤 校级"优秀主讲人"</h3>
+                    <p class="role">个人荣誉</p>
+                    <p class="desc">语言表达能力强，逻辑清晰、台风稳健。</p>
+                </div>
+                <div class="card exp-card">
+                    <h3>🌟 校级"优秀实践个人"</h3>
+                    <p class="role">个人荣誉</p>
+                    <p class="desc">积极参与实践活动，认真负责、踏实肯干。</p>
+                </div>
+                <div class="card exp-card">
+                    <h3>💻 WPS 计算机二级</h3>
+                    <p class="role">技能证书</p>
+                    <p class="desc">熟练掌握办公软件操作技能。</p>
                 </div>
             </section>
         </main>
@@ -556,6 +566,12 @@
     <div class="mouse-hint">🌸 移动鼠标会有花瓣飘落哦~</div>
 
     <script>
+    // ==================== Intro Screen ====================
+    document.getElementById('introScreen').addEventListener('click', function() {
+        this.classList.add('hiding');
+        setTimeout(() => { this.classList.add('hidden'); }, 800);
+    });
+
     // ==================== Particle Canvas ====================
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
@@ -577,39 +593,24 @@
         mouseX = e.clientX;
         mouseY = e.clientY;
         mouseActive = true;
-        // Spawn petals at mouse position
-        if (Math.random() < 0.35) {
-            spawnMousePetal(mouseX, mouseY);
-        }
+        if (Math.random() < 0.35) spawnMousePetal(mouseX, mouseY);
         clearTimeout(mouseTimer);
         mouseTimer = setTimeout(() => { mouseActive = false; }, 800);
     });
 
     document.addEventListener('click', (e) => {
-        // Burst of petals on click
-        for (let i = 0; i < 8; i++) {
-            spawnMousePetal(e.clientX, e.clientY, true);
-        }
+        for (let i = 0; i < 8; i++) spawnMousePetal(e.clientX, e.clientY, true);
     });
 
-    // ---- Color palettes for petals/leaves ----
     const petalColors = [
-        [255, 182, 193], // light pink
-        [255, 160, 180], // pink
-        [255, 200, 210], // soft pink
-        [255, 140, 160], // rose
-        [240, 200, 230], // lavender pink
-        [255, 220, 230], // pale pink
+        [255, 182, 193], [255, 160, 180], [255, 200, 210],
+        [255, 140, 160], [240, 200, 230], [255, 220, 230],
     ];
     const leafColors = [
-        [120, 190, 120],  // green
-        [140, 200, 100],  // yellow-green
-        [100, 170, 130],  // teal green
-        [180, 210, 140],  // light green
-        [200, 180, 120],  // golden
+        [120, 190, 120], [140, 200, 100], [100, 170, 130],
+        [180, 210, 140], [200, 180, 120],
     ];
 
-    // ---- Floating particles (ambient) ----
     let floatingParticles = [];
 
     function createFloatingParticle() {
@@ -617,30 +618,24 @@
         const colors = isLeaf ? leafColors : petalColors;
         const color = colors[Math.floor(Math.random() * colors.length)];
         return {
-            x: Math.random() * W,
-            y: -20 - Math.random() * H * 0.3,
+            x: Math.random() * W, y: -20 - Math.random() * H * 0.3,
             size: isLeaf ? (4 + Math.random() * 5) : (3 + Math.random() * 5),
-            vx: (Math.random() - 0.5) * 0.8,
-            vy: 0.3 + Math.random() * 0.8,
-            rot: Math.random() * Math.PI * 2,
-            rotV: (Math.random() - 0.5) * 0.03,
+            vx: (Math.random() - 0.5) * 0.8, vy: 0.3 + Math.random() * 0.8,
+            rot: Math.random() * Math.PI * 2, rotV: (Math.random() - 0.5) * 0.03,
             alpha: 0.25 + Math.random() * 0.45,
             wobble: Math.random() * Math.PI * 2,
             wobbleSpeed: 0.008 + Math.random() * 0.015,
             wobbleAmp: 0.3 + Math.random() * 0.6,
-            isLeaf: isLeaf,
-            color: color
+            isLeaf, color
         };
     }
 
-    // Initialize floating particles
     for (let i = 0; i < 25; i++) {
         const p = createFloatingParticle();
-        p.y = Math.random() * H; // spread across screen initially
+        p.y = Math.random() * H;
         floatingParticles.push(p);
     }
 
-    // ---- Mouse trail petals ----
     let mousePetals = [];
 
     function spawnMousePetal(x, y, burst = false) {
@@ -664,27 +659,22 @@
             wobbleSpeed: 0.02 + Math.random() * 0.03,
             wobbleAmp: 0.4 + Math.random() * 0.8,
             gravity: burst ? 0.03 : 0.015,
-            isLeaf: isLeaf,
-            color: color
+            isLeaf, color
         });
     }
 
-    // ---- Drawing helpers ----
     function drawPetalShape(x, y, size, rot, color, alpha, isLeaf) {
         ctx.save();
         ctx.translate(x, y);
         ctx.rotate(rot);
         ctx.globalAlpha = alpha;
         ctx.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},0.85)`;
-
         if (isLeaf) {
-            // Leaf shape
             ctx.beginPath();
             ctx.moveTo(0, -size * 1.2);
             ctx.bezierCurveTo(size * 0.6, -size * 0.6, size * 0.5, size * 0.6, 0, size * 1.2);
             ctx.bezierCurveTo(-size * 0.5, size * 0.6, -size * 0.6, -size * 0.6, 0, -size * 1.2);
             ctx.fill();
-            // Leaf vein
             ctx.strokeStyle = `rgba(${Math.max(0,color[0]-30)},${Math.max(0,color[1]-30)},${Math.max(0,color[2]-30)},${alpha * 0.5})`;
             ctx.lineWidth = 0.5;
             ctx.beginPath();
@@ -692,34 +682,26 @@
             ctx.lineTo(0, size * 1);
             ctx.stroke();
         } else {
-            // Petal shape
             ctx.beginPath();
             ctx.moveTo(0, -size);
             ctx.bezierCurveTo(size * 0.7, -size * 0.35, size * 0.7, size * 0.35, 0, size);
             ctx.bezierCurveTo(-size * 0.7, size * 0.35, -size * 0.7, -size * 0.35, 0, -size);
             ctx.fill();
         }
-
         ctx.globalAlpha = 1;
         ctx.restore();
     }
 
-    // ---- Animation loop ----
     function animate() {
         ctx.clearRect(0, 0, W, H);
-
-        // Update & draw floating particles
         for (let i = 0; i < floatingParticles.length; i++) {
             const p = floatingParticles[i];
             p.wobble += p.wobbleSpeed;
             p.x += p.vx + Math.sin(p.wobble) * p.wobbleAmp;
             p.y += p.vy;
             p.rot += p.rotV;
-
-            // Mouse influence on nearby floating particles
             if (mouseActive) {
-                const dx = p.x - mouseX;
-                const dy = p.y - mouseY;
+                const dx = p.x - mouseX, dy = p.y - mouseY;
                 const dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < 150) {
                     const force = (150 - dist) / 150 * 0.8;
@@ -727,20 +709,11 @@
                     p.vy += (dy / dist) * force * 0.5;
                 }
             }
-
-            // Dampen velocity
             p.vx *= 0.995;
-            p.vy = p.vy * 0.995 + 0.002; // gentle gravity
-
-            // Reset if out of bounds
-            if (p.y > H + 30 || p.x < -60 || p.x > W + 60) {
-                Object.assign(p, createFloatingParticle());
-            }
-
+            p.vy = p.vy * 0.995 + 0.002;
+            if (p.y > H + 30 || p.x < -60 || p.x > W + 60) Object.assign(p, createFloatingParticle());
             drawPetalShape(p.x, p.y, p.size, p.rot, p.color, p.alpha, p.isLeaf);
         }
-
-        // Update & draw mouse petals
         for (let i = mousePetals.length - 1; i >= 0; i--) {
             const p = mousePetals[i];
             p.wobble += p.wobbleSpeed;
@@ -750,15 +723,9 @@
             p.vx *= 0.99;
             p.rot += p.rotV;
             p.life -= p.decay;
-
-            if (p.life <= 0) {
-                mousePetals.splice(i, 1);
-                continue;
-            }
-
+            if (p.life <= 0) { mousePetals.splice(i, 1); continue; }
             drawPetalShape(p.x, p.y, p.size, p.rot, p.color, p.alpha * p.life, p.isLeaf);
         }
-
         requestAnimationFrame(animate);
     }
     animate();
