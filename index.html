@@ -1162,6 +1162,103 @@
             color: #0077cc;
         }
 
+        /* ==================== Daily Quote ==================== */
+        #daily-quote-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        #daily-quote-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .quote-box {
+            background: linear-gradient(135deg, rgba(10, 10, 30, 0.95), rgba(20, 10, 40, 0.95));
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            padding: 50px 40px;
+            max-width: 550px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            transform: scale(0.8) translateY(30px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.2), 0 0 100px rgba(123, 47, 247, 0.1);
+        }
+
+        #daily-quote-overlay.show .quote-box {
+            transform: scale(1) translateY(0);
+        }
+
+        .quote-box .quote-emoji {
+            font-size: 50px;
+            margin-bottom: 20px;
+            animation: bounceEmoji 2s ease infinite;
+        }
+
+        @keyframes bounceEmoji {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.1); }
+        }
+
+        .quote-box .quote-text {
+            font-size: 20px;
+            color: #fff;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-style: italic;
+            position: relative;
+            padding: 0 10px;
+        }
+
+        .quote-box .quote-text::before {
+            content: '"';
+            font-size: 60px;
+            color: #00d4ff;
+            position: absolute;
+            top: -25px;
+            left: -10px;
+            opacity: 0.3;
+            font-family: Georgia, serif;
+        }
+
+        .quote-box .quote-author {
+            font-size: 14px;
+            color: #00d4ff;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+        }
+
+        .quote-box .quote-close {
+            padding: 10px 35px;
+            background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quote-box .quote-close:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+        }
+
         /* ==================== Responsive ==================== */
         @media (max-width: 768px) {
             .nav-links {
@@ -1272,7 +1369,8 @@
             <h2 class="hero-title">
                 <span class="typewriter" id="typewriter"></span>
             </h2>
-            <p class="hero-desc">
+        <p class="daily-quote-inline" id="daily-quote-inline" style="font-size: 15px; color: rgba(0,212,255,0.7); margin-bottom: 20px; min-height: 24px; transition: all 0.5s ease;"></p>
+        <p class="hero-desc">
                 扎实的云计算技术基础，出色的团队协作与沟通能力，追求卓越的售前售后客服/销售岗位人才。
             </p>
             <div class="hero-buttons">
@@ -1652,6 +1750,16 @@
         <p>&copy; 2025 严小军 | 个人简历网站 | 用代码书写未来</p>
     </footer>
 
+    <!-- Daily Quote Overlay -->
+    <div id="daily-quote-overlay" onclick="closeQuote(event)">
+        <div class="quote-box">
+            <div class="quote-emoji" id="quote-emoji">😊</div>
+            <div class="quote-text" id="quote-text"></div>
+            <div class="quote-author" id="quote-author"></div>
+            <button class="quote-close" onclick="closeQuoteBtn()">开始探索 ✨</button>
+        </div>
+    </div>
+
     <!-- Back to Top -->
     <button id="back-to-top" onclick="scrollToTop()">↑</button>
 
@@ -1659,10 +1767,69 @@
     <button id="theme-toggle" onclick="toggleTheme()">☀️</button>
 
     <script>
+        // ==================== Daily Quote ====================
+        const happyQuotes = [
+            { text: '每一天都是新的开始，微笑面对生活！', author: '—— 快乐每一天', emoji: '😊' },
+            { text: '生活不是等待暴风雨过去，而是学会在雨中跳舞。', author: '—— 维维安·格林', emoji: '💃' },
+            { text: '快乐不是因为拥有的多，而是因为计较的少。', author: '—— 佚名', emoji: '🌻' },
+            { text: '今天的你，是昨天的你决定的；明天的你，由今天的你创造。', author: '—— 正能量语录', emoji: '🌟' },
+            { text: '保持热爱，奔赴下一场山海。', author: '—— 佚名', emoji: '⛰️' },
+            { text: '生活明朗，万物可爱，人间值得，未来可期。', author: '—— 佚名', emoji: '🌈' },
+            { text: '你笑起来真好看，像春天的花一样。', author: '—— 佚名', emoji: '🌸' },
+            { text: '每天进步一点点，就是最好的人生策略。', author: '—— 佚名', emoji: '📈' },
+            { text: '世界上只有一种英雄主义，就是认清生活的真相后依然热爱生活。', author: '—— 罗曼·罗兰', emoji: '英雄' },
+            { text: '做自己生命的主角，而非别人生命的看客。', author: '—— 佚名', emoji: '🎬' },
+            { text: '阳光总在风雨后，请相信有彩虹。', author: '—— 佚名', emoji: '🌈' },
+            { text: '把每一天当成最后一天来过，有一天你会发现你是对的。', author: '—— 史蒂夫·乔布斯', emoji: '🍎' },
+            { text: '生活就像骑自行车，想保持平衡就得往前走。', author: '—— 阿尔伯特·爱因斯坦', emoji: '🚲' },
+            { text: '你今天的努力，是幸运的伏笔。', author: '—— 佚名', emoji: '🍀' },
+            { text: '做一个温暖的人，不求大富大贵，只求生活简单快乐。', author: '—— 佚名', emoji: '☀️' },
+            { text: '人生没有彩排，每天都是现场直播。', author: '—— 佚名', emoji: '📺' },
+            { text: '梦想不会逃跑，逃跑的永远是自己。', author: '—— 佚名', emoji: '🏃' },
+            { text: '努力的意义，就是以后的日子里，放眼望去全部都是自己喜欢的人和事。', author: '—— 佚名', emoji: '💪' },
+            { text: '愿你一生努力，一生被爱。', author: '—— 佚名', emoji: '❤️' },
+            { text: '所谓万丈深渊，下去也是前程万里。', author: '—— 木心', emoji: '🏔️' }
+        ];
+
+        function showDailyQuote() {
+            // 根据当前日期生成确定性索引（同一天显示相同名言）
+            const today = new Date();
+            const dateKey = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+            const index = dateKey % happyQuotes.length;
+            const quote = happyQuotes[index];
+
+            document.getElementById('quote-text').textContent = quote.text;
+            document.getElementById('quote-author').textContent = quote.author;
+            document.getElementById('quote-emoji').textContent = quote.emoji;
+            document.getElementById('daily-quote-inline').textContent = '💡 ' + quote.text;
+
+            setTimeout(() => {
+                document.getElementById('daily-quote-overlay').classList.add('show');
+            }, 1200);
+        }
+
+        function closeQuote(e) {
+            if (e.target === document.getElementById('daily-quote-overlay')) {
+                document.getElementById('daily-quote-overlay').classList.remove('show');
+            }
+        }
+
+        function closeQuoteBtn() {
+            document.getElementById('daily-quote-overlay').classList.remove('show');
+        }
+
+        // ESC key to close quote
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.getElementById('daily-quote-overlay').classList.remove('show');
+            }
+        });
+
         // ==================== Loading Screen ====================
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('loading-screen').classList.add('hidden');
+                showDailyQuote();
             }, 800);
         });
 
