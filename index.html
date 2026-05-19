@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>严小军 - 个人网站</title>
+    <style>
+        /* ==================== CSS Reset & Base ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            color: #e0e0e0;
+            background: #0a0a1a;
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+
+        /* ==================== Loading Screen ==================== */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(0, 212, 255, 0.1);
+            border-top: 3px solid #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loader-text {
+            margin-top: 20px;
+            color: #00d4ff;
+            font-size: 14px;
+            letter-spacing: 3px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ==================== Particle Canvas ==================== */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ==================== Navigation ==================== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.4s ease;
+            background: transparent;
+        }
+
+        nav.scrolled {
+            background: rgba(10, 10, 26, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.3);
+            padding: 10px 40px;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00d4ff;
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #b0b0b0;
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 1px;
+            position: relative;
+            transition: color 0.3s ease;
+            padding-bottom: 4px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #00d4ff;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #00d4ff;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 2px;
+            background: #00d4ff;
+            transition: all 0.3s ease;
+        }
+
+        /* ==================== Hero Section ==================== */
+        #hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero-greeting {
+            font-size: 18px;
+            color: #00d4ff;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease 0.5s forwards;
+        }
+
+        .hero-name {
+            font-size: 64px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00d4ff, #7b2ff7, #ff6b9d);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease infinite, fadeInUp 0.8s ease 0.7s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .hero-title {
+            font-size: 28px;
+            color: #b0b0b0;
+            margin: 15px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease 0.9s forwards;
+        }
+
+        .typewriter {
+            display: inline-block;
+            border-right: 3px solid #00d4ff;
+            animation: blink 0.8s step-end infinite;
+        }
+
+        .hero-desc {
+            font-size: 16px;
+            color: #888;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease 1.1s forwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease 1.3s forwards;
+        }
+
+        .btn {
+            padding: 12px 35px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #00d4ff;
+            border: 2px solid #00d4ff;
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 1.8s forwards;
+        }
+
+        .scroll-indicator .mouse {
+            width: 26px;
+            height: 40px;
+            border: 2px solid rgba(0, 212, 255, 0.5);
+            border-radius: 13px;
+            position: relative;
+            margin: 0 auto 10px;
+        }
+
+        .scroll-indicator .wheel {
+            width: 4px;
+            height: 8px;
+            background: #00d4ff;
+            border-radius: 2px;
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scrollWheel 1.5s ease infinite;
+        }
+
+        .scroll-indicator p {
+            font-size: 11px;
+            color: #666;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        @keyframes scrollWheel {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(12px); }
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        /* ==================== Sections Common ==================== */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 100px 20px;
+        }
+
+        .section-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .section-header .underline {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #00d4ff, #7b2ff7);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        .section-header p {
+            color: #888;
+            margin-top: 15px;
+            font-size: 15px;
+        }
+
+        /* Animate on scroll */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .animate-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .animate-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ==================== About Section ==================== */
+        #about {
+            background: rgba(15, 15, 35, 0.5);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-avatar {
+            text-align: center;
+        }
+
+        .avatar-wrapper {
+            width: 250px;
+            height: 250px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+            padding: 4px;
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #0a0a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            color: #00d4ff;
+            overflow: hidden;
+        }
+
+        .avatar-initials {
+            font-size: 72px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .about-text h3 {
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .about-text p {
+            color: #b0b0b0;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .info-list li {
+            font-size: 14px;
+            color: #b0b0b0;
+        }
+
+        .info-list li span {
+            color: #00d4ff;
+            font-weight: 600;
+        }
+
+        /* ==================== Education Section ==================== */
+        #education {
+            background: rgba(10, 10, 26, 0.8);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, #00d4ff, #7b2ff7);
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 45%;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            border-radius: 15px;
+            margin-bottom: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+        }
+
+        .timeline-item:nth-child(odd) {
+            margin-left: 5%;
+        }
+
+        .timeline-item:nth-child(even) {
+            margin-left: 50%;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #00d4ff;
+            border-radius: 50%;
+            top: 30px;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -8%;
+            transform: translateX(50%);
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -8%;
+            transform: translateX(-50%);
+        }
+
+        .timeline-date {
+            font-size: 13px;
+            color: #00d4ff;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .timeline-title {
+            font-size: 20px;
+            color: #fff;
+            margin: 8px 0;
+        }
+
+        .timeline-subtitle {
+            font-size: 14px;
+            color: #b0b0b0;
+            margin-bottom: 10px;
+        }
+
+        .timeline-desc {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.8;
+        }
+
+        /* ==================== Skills Section ==================== */
+        #skills {
+            background: rgba(15, 15, 35, 0.5);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .skill-category {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .skill-category:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+        }
+
+        .skill-category-icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .skill-category h3 {
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .skill-bar-container {
+            margin-bottom: 15px;
+        }
+
+        .skill-bar-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .skill-bar-header span {
+            font-size: 13px;
+            color: #b0b0b0;
+        }
+
+        .skill-bar-header .percentage {
+            color: #00d4ff;
+        }
+
+        .skill-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .skill-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #7b2ff7);
+            border-radius: 3px;
+            width: 0;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-tag {
+            padding: 6px 16px;
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            font-size: 13px;
+            color: #00d4ff;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .skill-tag:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+        }
+
+        /* ==================== Experience Section ==================== */
+        #experience {
+            background: rgba(10, 10, 26, 0.8);
+        }
+
+        .experience-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .exp-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            border-radius: 15px;
+            padding: 35px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exp-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #00d4ff, #7b2ff7);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .exp-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .exp-card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.15);
+        }
+
+        .exp-card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 47, 247, 0.2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .exp-card h3 {
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .exp-card .exp-role {
+            font-size: 14px;
+            color: #00d4ff;
+            margin-bottom: 5px;
+        }
+
+        .exp-card .exp-date {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .exp-card p {
+            font-size: 14px;
+            color: #b0b0b0;
+            line-height: 1.8;
+        }
+
+        /* ==================== Honors Section ==================== */
+        #honors {
+            background: rgba(15, 15, 35, 0.5);
+        }
+
+        .honors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .honor-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .honor-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.05) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .honor-card:hover::after {
+            opacity: 1;
+        }
+
+        .honor-card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.15);
+        }
+
+        .honor-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .honor-card h3 {
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .honor-card p {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.7;
+        }
+
+        /* ==================== Stats Counter ==================== */
+        .stats-section {
+            position: relative;
+            z-index: 1;
+            padding: 60px 20px;
+            background: rgba(10, 10, 26, 0.9);
+        }
+
+        .stats-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #888;
+            margin-top: 5px;
+            letter-spacing: 1px;
+        }
+
+        /* ==================== Contact Section ==================== */
+        #contact {
+            background: rgba(15, 15, 35, 0.5);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .contact-info h3 {
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .contact-info p {
+            color: #b0b0b0;
+            font-size: 15px;
+            margin-bottom: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 212, 255, 0.08);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateX(5px);
+        }
+
+        .contact-item-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(123, 47, 247, 0.15));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .contact-item-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-item-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-item-value {
+            font-size: 15px;
+            color: #e0e0e0;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .contact-form h3 {
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .btn-submit {
+            padding: 14px 35px;
+            background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        /* ==================== Footer ==================== */
+        footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(5, 5, 15, 0.9);
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        footer p {
+            color: #666;
+            font-size: 13px;
+        }
+
+        footer .footer-links {
+            margin-bottom: 15px;
+        }
+
+        footer .footer-links a {
+            color: #888;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 13px;
+            transition: color 0.3s ease;
+        }
+
+        footer .footer-links a:hover {
+            color: #00d4ff;
+        }
+
+        /* ==================== Back to Top ==================== */
+        #back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        #back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.5);
+        }
+
+        /* ==================== Theme Toggle ==================== */
+        #theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 85px;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 999;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #theme-toggle:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* ==================== Light Theme ==================== */
+        body.light-theme {
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        body.light-theme nav {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        body.light-theme .nav-links a {
+            color: #555;
+        }
+
+        body.light-theme .nav-links a:hover,
+        body.light-theme .nav-links a.active {
+            color: #0077cc;
+        }
+
+        body.light-theme .hero-name {
+            background: linear-gradient(135deg, #0077cc, #6b21a8, #e11d48);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body.light-theme .hero-title,
+        body.light-theme .hero-desc {
+            color: #666;
+        }
+
+        body.light-theme section,
+        body.light-theme .stats-section {
+            background: transparent;
+        }
+
+        body.light-theme #about,
+        body.light-theme #skills,
+        body.light-theme #honors,
+        body.light-theme #contact {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        body.light-theme .skill-category,
+        body.light-theme .exp-card,
+        body.light-theme .honor-card,
+        body.light-theme .timeline-item,
+        body.light-theme .contact-item {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        body.light-theme .skill-category:hover,
+        body.light-theme .exp-card:hover,
+        body.light-theme .honor-card:hover,
+        body.light-theme .timeline-item:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        body.light-theme .about-text h3,
+        body.light-theme .timeline-title,
+        body.light-theme .skill-category h3,
+        body.light-theme .exp-card h3,
+        body.light-theme .honor-card h3,
+        body.light-theme .contact-info h3,
+        body.light-theme .section-header h2 {
+            color: #1a1a2e;
+        }
+
+        body.light-theme .about-text p,
+        body.light-theme .timeline-desc,
+        body.light-theme .exp-card p,
+        body.light-theme .contact-info p {
+            color: #555;
+        }
+
+        body.light-theme .timeline-subtitle,
+        body.light-theme .info-list li {
+            color: #666;
+        }
+
+        body.light-theme .contact-item-value {
+            color: #333;
+        }
+
+        body.light-theme footer {
+            background: rgba(240, 240, 245, 0.95);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme .honor-card p,
+        body.light-theme .stat-label,
+        body.light-theme .skill-bar-header span,
+        body.light-theme footer p,
+        body.light-theme footer .footer-links a {
+            color: #777;
+        }
+
+        body.light-theme .form-group input,
+        body.light-theme .form-group textarea {
+            background: rgba(0, 0, 0, 0.02);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #333;
+        }
+
+        body.light-theme #theme-toggle {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #0077cc;
+        }
+
+        /* ==================== Responsive ==================== */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 10, 26, 0.98);
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            body.light-theme .nav-links.open {
+                background: rgba(255, 255, 255, 0.98);
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero-name {
+                font-size: 36px;
+            }
+
+            .hero-title {
+                font-size: 20px;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                margin-left: 50px !important;
+            }
+
+            .timeline-dot {
+                left: -35px !important;
+                right: auto !important;
+                transform: none !important;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .info-list {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <p class="loader-text">LOADING...</p>
+    </div>
+
+    <!-- Particle Canvas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="#hero" class="nav-logo">YXJ</a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#hero" class="active">首页</a></li>
+            <li><a href="#about">关于我</a></li>
+            <li><a href="#education">教育经历</a></li>
+            <li><a href="#skills">技能特长</a></li>
+            <li><a href="#experience">校园经历</a></li>
+            <li><a href="#honors">荣誉证书</a></li>
+            <li><a href="#contact">联系我</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="hero-content">
+            <p class="hero-greeting">WELCOME TO MY PORTFOLIO</p>
+            <h1 class="hero-name">严小军</h1>
+            <h2 class="hero-title">
+                <span class="typewriter" id="typewriter"></span>
+            </h2>
+            <p class="hero-desc">
+                扎实的云计算技术基础，出色的团队协作与沟通能力，追求卓越的售前售后客服/销售岗位人才。
+            </p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn btn-primary">联系我</a>
+                <a href="#about" class="btn btn-outline">了解更多</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <p>向下滚动</p>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="section-container">
+            <div class="section-header animate-on-scroll">
+                <h2>关于我</h2>
+                <div class="underline"></div>
+                <p>热爱技术、善于沟通、追求卓越</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-avatar animate-left">
+                    <div class="avatar-wrapper">
+                        <div class="avatar-inner">
+                            <span class="avatar-initials">严</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-text animate-right">
+                    <h3>你好，我是严小军 👋</h3>
+                    <p>
+                        本人具备扎实的云运维与云计算专业基础，熟练掌握 Linux、Python、MySQL 等核心技术，
+                        同时精通 Office 办公软件与编程工具。在校期间担任广播站组长，锻炼了出色的团队协作与沟通执行能力。
+                        多次荣获校级荣誉及国家励志奖学金，兼具较强学习能力与抗压素质。
+                    </p>
+                    <p>
+                        对计算机类别售前售后客服以及销售岗位充满热情，能快速适应岗位需求，高效完成工作任务。
+                    </p>
+                    <ul class="info-list">
+                        <li><span>姓名：</span>严小军</li>
+                        <li><span>性别：</span>男</li>
+                        <li><span>年龄：</span>21</li>
+                        <li><span>电话：</span>17762892519</li>
+                        <li><span>邮箱：</span>1735456860@qq.com</li>
+                        <li><span>意向：</span>售前售后客服/销售</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Counter -->
+    <div class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item animate-on-scroll">
+                <div class="stat-number" data-target="5">0</div>
+                <div class="stat-label">荣誉证书</div>
+            </div>
+            <div class="stat-item animate-on-scroll">
+                <div class="stat-number" data-target="6">0</div>
+                <div class="stat-label">技能特长</div>
+            </div>
+            <div class="stat-item animate-on-scroll">
+                <div class="stat-number" data-target="3">0</div>
+                <div class="stat-label">在校经历</div>
+            </div>
+            <div class="stat-item animate-on-scroll">
+                <div class="stat-number" data-target="100">0</div>
+                <div class="stat-label">努力程度%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Education Section -->
+    <section id="education">
+        <div class="section-container">
+            <div class="section-header animate-on-scroll">
+                <h2>教育经历</h2>
+                <div class="underline"></div>
+                <p>扎实的专业知识，系统的云计算技术学习</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item animate-left">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2023.09 - 2026.06</div>
+                    <h3 class="timeline-title">湖北科技职业学院</h3>
+                    <p class="timeline-subtitle">云计算技术应用 / 专科</p>
+                    <p class="timeline-desc">
+                        主修课程：云计算导论、计算机网络技术、Linux 系统应用、Python 程序设计、
+                        数据库技术（MySQL）、虚拟化技术与应用、OpenStack 技术与应用、私有云基础架构与运维等。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="section-container">
+            <div class="section-header animate-on-scroll">
+                <h2>技能特长</h2>
+                <div class="underline"></div>
+                <p>多元化技能，全方位能力</p>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-category animate-on-scroll">
+                    <div class="skill-category-icon">💼</div>
+                    <h3>办公软件</h3>
+                    <div class="skill-bar-container">
+                        <div class="skill-bar-header">
+                            <span>Word / Excel / PPT</span>
+                            <span class="percentage">95%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-bar-fill" data-width="95"></div>
+                        </div>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag">文档排版</span>
+                        <span class="skill-tag">数据处理</span>
+                        <span class="skill-tag">图表制作</span>
+                        <span class="skill-tag">WPS二级</span>
+                    </div>
+                </div>
+                <div class="skill-category animate-on-scroll">
+                    <div class="skill-category-icon">🐧</div>
+                    <h3>系统运维</h3>
+                    <div class="skill-bar-container">
+                        <div class="skill-bar-header">
+                            <span>Linux 多系统运维</span>
+                            <span class="percentage">85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-bar-fill" data-width="85"></div>
+                        </div>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Ubuntu</span>
+                        <span class="skill-tag">CentOS</span>
+                        <span class="skill-tag">RHEL</span>
+                        <span class="skill-tag">虚拟化</span>
+                    </div>
+                </div>
+                <div class="skill-category animate-on-scroll">
+                    <div class="skill-category-icon">🐍</div>
+                    <h3>编程开发</h3>
+                    <div class="skill-bar-container">
+                        <div class="skill-bar-header">
+                            <span>Python / C++</span>
+                            <span class="percentage">70%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-bar-fill" data-width="70"></div>
+                        </div>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">C++</span>
+                        <span class="skill-tag">逻辑分析</span>
+                        <span class="skill-tag">代码调试</span>
+                    </div>
+                </div>
+                <div class="skill-category animate-on-scroll">
+                    <div class="skill-category-icon">☁️</div>
+                    <h3>云计算技术</h3>
+                    <div class="skill-bar-container">
+                        <div class="skill-bar-header">
+                            <span>云平台与数据库</span>
+                            <span class="percentage">75%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-bar-fill" data-width="75"></div>
+                        </div>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag">OpenStack</span>
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">私有云</span>
+                        <span class="skill-tag">容器技术</span>
+                    </div>
+                </div>
+                <div class="skill-category animate-on-scroll">
+                    <div class="skill-category-icon">🗣️</div>
+                    <h3>语言能力</h3>
+                    <div class="skill-bar-container">
+                        <div class="skill-bar-header">
+                            <span>日语基础</span>
+                            <span class="percentage">45%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-bar-fill" data-width="45"></div>
+                        </div>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag">日语听说</span>
+                        <span class="skill-tag">基础阅读</span>
+                        <span class="skill-tag">跨语言学习</span>
+                    </div>
+                </div>
+                <div class="skill-category animate-on-scroll">
+                    <div class="skill-category-icon">🤝</div>
+                    <h3>综合素质</h3>
+                    <div class="skill-bar-container">
+                        <div class="skill-bar-header">
+                            <span>沟通与团队协作</span>
+                            <span class="percentage">90%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-bar-fill" data-width="90"></div>
+                        </div>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag">团队协作</span>
+                        <span class="skill-tag">语言表达</span>
+                        <span class="skill-tag">组织协调</span>
+                        <span class="skill-tag">抗压能力</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+        <div class="section-container">
+            <div class="section-header animate-on-scroll">
+                <h2>校园经历</h2>
+                <div class="underline"></div>
+                <p>丰富的校园实践，锻炼综合能力</p>
+            </div>
+            <div class="experience-cards">
+                <div class="exp-card animate-on-scroll">
+                    <div class="exp-card-icon">🎙️</div>
+                    <h3>校园广播站</h3>
+                    <p class="exp-role">组长</p>
+                    <p class="exp-date">2023.09 - 2026.06</p>
+                    <p>
+                        担任校园广播站组长期间，统筹日常播音安排与团队分工，协调成员完成节目策划、
+                        录制及播出工作，提升团队协作效率与广播站运营规范性，锻炼了组织协调、沟通统筹与现场执行能力。
+                    </p>
+                </div>
+                <div class="exp-card animate-on-scroll">
+                    <div class="exp-card-icon">🏆</div>
+                    <h3>校级技能竞赛</h3>
+                    <p class="exp-role">参赛选手</p>
+                    <p class="exp-date">2023.09 - 2026.06</p>
+                    <p>
+                        积极参与校级技能竞赛，围绕专业知识与实操技能备赛训练，在团队协作中完成方案设计与成果展示，
+                        提升专业应用、问题解决与抗压应变能力，收获竞赛经验与综合素养提升。
+                    </p>
+                </div>
+                <div class="exp-card animate-on-scroll">
+                    <div class="exp-card-icon">📢</div>
+                    <h3>主题宣讲活动</h3>
+                    <p class="exp-role">优秀主讲人</p>
+                    <p class="exp-date">2023.09 - 2026.06</p>
+                    <p>
+                        具备较强语言表达与现场控场能力，多次参与主题分享、宣讲展示活动，
+                        逻辑清晰、台风稳健，获得师生一致认可，被评为校级"优秀主讲人"。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Honors Section -->
+    <section id="honors">
+        <div class="section-container">
+            <div class="section-header animate-on-scroll">
+                <h2>荣誉证书</h2>
+                <div class="underline"></div>
+                <p>用实力证明自己，以荣誉见证成长</p>
+            </div>
+            <div class="honors-grid">
+                <div class="honor-card animate-on-scroll">
+                    <div class="honor-icon">🏅</div>
+                    <h3>国家励志奖学金</h3>
+                    <p>学习态度端正、成绩优异，兼顾学业与综合素质发展，体现较强学习能力与自律意识，品学兼优。</p>
+                </div>
+                <div class="honor-card animate-on-scroll">
+                    <div class="honor-icon">⭐</div>
+                    <h3>校级"励志之星"</h3>
+                    <p>严于律己、积极进取，以良好的学习态度与综合表现展现励志向上的精神风貌，树立优秀学生榜样。</p>
+                </div>
+                <div class="honor-card animate-on-scroll">
+                    <div class="honor-icon">🎤</div>
+                    <h3>校级"优秀主讲人"</h3>
+                    <p>具备较强语言表达与现场控场能力，逻辑清晰、台风稳健，获得师生一致认可。</p>
+                </div>
+                <div class="honor-card animate-on-scroll">
+                    <div class="honor-icon">🌟</div>
+                    <h3>校级"优秀实践个人"</h3>
+                    <p>积极参与校内外实践活动，认真负责、踏实肯干，在实践中提升综合能力与服务意识。</p>
+                </div>
+                <div class="honor-card animate-on-scroll">
+                    <div class="honor-icon">💻</div>
+                    <h3>WPS 计算机二级</h3>
+                    <p>熟练掌握文字处理、表格制作、演示文稿等办公技能，具备规范高效的计算机操作能力。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="section-container">
+            <div class="section-header animate-on-scroll">
+                <h2>联系我</h2>
+                <div class="underline"></div>
+                <p>期待与您取得联系，共创美好未来</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info animate-left">
+                    <h3>联系方式</h3>
+                    <p>如果您对我的背景和能力感兴趣，欢迎随时联系我！</p>
+                    <div class="contact-item">
+                        <div class="contact-item-icon">📱</div>
+                        <div class="contact-item-text">
+                            <span class="contact-item-label">电话</span>
+                            <span class="contact-item-value">177-6289-2519</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-item-icon">📧</div>
+                        <div class="contact-item-text">
+                            <span class="contact-item-label">邮箱</span>
+                            <span class="contact-item-value">1735456860@qq.com</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-item-icon">🎓</div>
+                        <div class="contact-item-text">
+                            <span class="contact-item-label">学校</span>
+                            <span class="contact-item-value">湖北科技职业学院</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-item-icon">💼</div>
+                        <div class="contact-item-text">
+                            <span class="contact-item-label">意向岗位</span>
+                            <span class="contact-item-value">售前售后客服 / 销售</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form animate-right">
+                    <h3>发送消息</h3>
+                    <div class="form-group">
+                        <input type="text" placeholder="您的姓名" />
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="您的邮箱" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="主题" />
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="请输入您的消息..."></textarea>
+                    </div>
+                    <button class="btn-submit" onclick="handleSend()">发送消息</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#hero">首页</a>
+            <a href="#about">关于我</a>
+            <a href="#skills">技能</a>
+            <a href="#honors">荣誉</a>
+            <a href="#contact">联系</a>
+        </div>
+        <p>&copy; 2025 严小军 | 个人简历网站 | 用代码书写未来</p>
+    </footer>
+
+    <!-- Back to Top -->
+    <button id="back-to-top" onclick="scrollToTop()">↑</button>
+
+    <!-- Theme Toggle -->
+    <button id="theme-toggle" onclick="toggleTheme()">☀️</button>
+
+    <script>
+        // ==================== Loading Screen ====================
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+            }, 800);
+        });
+
+        // ==================== Particle Background ====================
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouseX = 0;
+        let mouseY = 0;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 212, 255, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const count = Math.min(80, Math.floor((canvas.width * canvas.height) / 15000));
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function drawLines() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(0, 212, 255, ${0.1 * (1 - dist / 150)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+
+                // Mouse interaction
+                const mdx = particles[i].x - mouseX;
+                const mdy = particles[i].y - mouseY;
+                const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                if (mdist < 200) {
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(mouseX, mouseY);
+                    ctx.strokeStyle = `rgba(123, 47, 247, ${0.2 * (1 - mdist / 200)})`;
+                    ctx.lineWidth = 0.8;
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            drawLines();
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        // ==================== Typewriter Effect ====================
+        const typewriterTexts = [
+            '售前售后客服',
+            '销售精英',
+            '云计算技术应用',
+            'Linux 运维工程师',
+            '团队协作者'
+        ];
+        let typewriterIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typewriterEl = document.getElementById('typewriter');
+
+        function typeWriter() {
+            const currentText = typewriterTexts[typewriterIndex];
+
+            if (isDeleting) {
+                typewriterEl.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typewriterEl.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let speed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIndex === currentText.length) {
+                speed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                typewriterIndex = (typewriterIndex + 1) % typewriterTexts.length;
+                speed = 500;
+            }
+
+            setTimeout(typeWriter, speed);
+        }
+
+        typeWriter();
+
+        // ==================== Navbar Scroll Effect ====================
+        const navbar = document.getElementById('navbar');
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            // Navbar background
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            // Active link
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Back to top button
+            const backToTop = document.getElementById('back-to-top');
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        // ==================== Scroll Animations ====================
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+
+                    // Trigger skill bars
+                    const skillBars = entry.target.querySelectorAll('.skill-bar-fill');
+                    skillBars.forEach(bar => {
+                        const width = bar.getAttribute('data-width');
+                        setTimeout(() => {
+                            bar.style.width = width + '%';
+                        }, 200);
+                    });
+
+                    // Trigger counter
+                    const counters = entry.target.querySelectorAll('.stat-number');
+                    counters.forEach(counter => {
+                        animateCounter(counter);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll, .animate-left, .animate-right').forEach(el => {
+            observer.observe(el);
+        });
+
+        // ==================== Counter Animation ====================
+        function animateCounter(el) {
+            if (el.dataset.animated) return;
+            el.dataset.animated = 'true';
+
+            const target = parseInt(el.getAttribute('data-target'));
+            const duration = 2000;
+            const start = 0;
+            const startTime = performance.now();
+
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = Math.floor(start + (target - start) * eased);
+                el.textContent = current;
+
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    el.textContent = target;
+                }
+            }
+
+            requestAnimationFrame(updateCounter);
+        }
+
+        // ==================== Mobile Menu ====================
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('open');
+        }
+
+        // Close menu on link click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('open');
+            });
+        });
+
+        // ==================== Back to Top ====================
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ==================== Theme Toggle ====================
+        let isDarkTheme = true;
+        function toggleTheme() {
+            isDarkTheme = !isDarkTheme;
+            document.body.classList.toggle('light-theme');
+            document.getElementById('theme-toggle').textContent = isDarkTheme ? '☀️' : '🌙';
+        }
+
+        // ==================== Send Message ====================
+        function handleSend() {
+            alert('感谢您的关注！由于这是一个静态网站，消息功能暂不可用。\n请直接通过电话或邮箱联系我：\n📱 177-6289-2519\n📧 1735456860@qq.com');
+        }
+
+        // ==================== Smooth scroll for anchor links ====================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
