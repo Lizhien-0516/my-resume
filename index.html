@@ -6,162 +6,108 @@
     <title>严小军 - 个人简历</title>
     <style>
         :root {
-            --primary: #00d4ff;
-            --primary-dark: #0099cc;
-            --accent: #7b68ee;
-            --bg: transparent;
-            --card-bg: rgba(15, 20, 35, 0.75);
-            --card-hover: rgba(20, 28, 50, 0.85);
-            --text: #e8ecf0;
-            --text-light: #8899aa;
-            --border: rgba(0, 212, 255, 0.15);
-            --shadow: 0 8px 32px rgba(0,0,0,0.3);
+            --primary: #3a7bd5;
+            --primary-dark: #2c5faa;
+            --accent: #e8a0bf;
+            --text: #2c3e50;
+            --text-light: #5a6a7a;
+            --card-bg: rgba(255, 255, 255, 0.72);
+            --card-hover: rgba(255, 255, 255, 0.88);
+            --border: rgba(58, 123, 213, 0.15);
+            --shadow: 0 8px 32px rgba(100, 140, 200, 0.15);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: #0a0a2e;
+            background: #e8f0f8;
             color: var(--text);
             line-height: 1.7;
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        /* Anime Background Canvas */
-        #anime-bg {
+        /* Background Image */
+        .bg-image {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            z-index: -2;
+            z-index: -3;
+            background: url('preview.jpg') center center / cover no-repeat;
         }
+
+        /* Dynamic particle overlay canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
         .content-wrapper {
             position: relative;
             z-index: 1;
         }
 
-        /* Theme Button */
-        .theme-toggle {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            z-index: 999;
-            background: rgba(15,20,35,0.8);
-            border: 2px solid rgba(0,212,255,0.4);
-            color: white;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            font-size: 22px;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .theme-toggle:hover {
-            transform: scale(1.1) rotate(15deg);
-            border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(0,212,255,0.4);
-        }
-        .theme-panel {
-            position: fixed;
-            bottom: 85px;
-            right: 25px;
-            z-index: 999;
-            background: rgba(10,15,30,0.92);
-            border: 1px solid rgba(0,212,255,0.25);
-            border-radius: 14px;
-            padding: 14px;
-            display: none;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-            min-width: 140px;
-        }
-        .theme-panel.show { display: block; }
-        .theme-panel h4 {
-            color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 0.85rem;
-            text-align: center;
-        }
-        .theme-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.2s;
-            font-size: 0.85rem;
-            color: #ccc;
-            border: 1px solid transparent;
-        }
-        .theme-option:hover { background: rgba(0,212,255,0.1); color: white; }
-        .theme-option.active {
-            background: rgba(0,212,255,0.15);
-            border-color: rgba(0,212,255,0.3);
-            color: white;
-        }
-
         /* Header */
         header {
-            padding: 100px 20px 50px;
+            padding: 90px 20px 45px;
             text-align: center;
         }
         .avatar {
-            width: 130px; height: 130px;
+            width: 120px; height: 120px;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(0,212,255,0.3), rgba(123,104,238,0.3));
-            border: 3px solid rgba(0,212,255,0.5);
-            margin: 0 auto 25px;
+            background: linear-gradient(135deg, rgba(58,123,213,0.25), rgba(232,160,191,0.25));
+            border: 3px solid rgba(255,255,255,0.7);
+            margin: 0 auto 22px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 52px;
-            box-shadow: 0 0 30px rgba(0,212,255,0.2);
+            font-size: 48px;
+            color: var(--primary);
+            font-weight: 700;
+            box-shadow: 0 4px 20px rgba(100,140,200,0.2);
             animation: float 4s ease-in-out infinite;
+            backdrop-filter: blur(6px);
         }
         @keyframes float {
             0%,100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
         }
         header h1 {
-            font-size: 2.8rem;
-            background: linear-gradient(135deg, #00d4ff, #7b68ee, #f472b6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-            text-shadow: none;
+            font-size: 2.6rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            text-shadow: 0 2px 8px rgba(255,255,255,0.6);
         }
         header .subtitle {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: var(--text-light);
             margin-bottom: 8px;
         }
         .daily-quote {
-            margin-top: 20px;
-            padding: 14px 24px;
-            background: rgba(0,212,255,0.08);
-            border: 1px solid rgba(0,212,255,0.2);
+            margin-top: 18px;
+            padding: 13px 22px;
+            background: rgba(255, 255, 255, 0.65);
+            border: 1px solid rgba(58,123,213,0.15);
             border-radius: 12px;
             display: inline-block;
             max-width: 500px;
             backdrop-filter: blur(8px);
         }
-        .daily-quote .label { font-size: 0.8rem; color: var(--primary); margin-bottom: 4px; }
+        .daily-quote .label { font-size: 0.8rem; color: var(--primary); margin-bottom: 3px; font-weight: 600; }
         .daily-quote .text {
-            font-size: 0.95rem;
-            color: #ccc;
+            font-size: 0.93rem;
+            color: var(--text-light);
             font-style: italic;
             line-height: 1.6;
         }
         .contact-links {
             display: flex;
             justify-content: center;
-            gap: 16px;
-            margin-top: 25px;
+            gap: 14px;
+            margin-top: 22px;
             flex-wrap: wrap;
         }
         .contact-links a {
@@ -170,26 +116,27 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            padding: 10px 18px;
-            background: rgba(0,212,255,0.08);
-            border: 1px solid rgba(0,212,255,0.2);
+            padding: 9px 16px;
+            background: rgba(255,255,255,0.6);
+            border: 1px solid rgba(58,123,213,0.15);
             border-radius: 25px;
             font-size: 0.88rem;
             transition: all 0.3s;
+            backdrop-filter: blur(6px);
         }
         .contact-links a:hover {
-            background: rgba(0,212,255,0.18);
-            border-color: rgba(0,212,255,0.4);
+            background: rgba(255,255,255,0.85);
+            border-color: rgba(58,123,213,0.3);
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,212,255,0.15);
+            box-shadow: 0 4px 15px rgba(100,140,200,0.15);
         }
 
         /* Navigation */
         nav {
-            background: rgba(10,15,30,0.7);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(15px);
-            border-top: 1px solid rgba(0,212,255,0.1);
-            border-bottom: 1px solid rgba(0,212,255,0.1);
+            border-top: 1px solid rgba(58,123,213,0.08);
+            border-bottom: 1px solid rgba(58,123,213,0.08);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -204,7 +151,7 @@
         }
         nav ul li a {
             display: block;
-            padding: 16px 22px;
+            padding: 15px 20px;
             color: var(--text-light);
             text-decoration: none;
             font-weight: 500;
@@ -215,64 +162,64 @@
         nav ul li a:hover, nav ul li a.active {
             color: var(--primary);
             border-bottom-color: var(--primary);
-            background: rgba(0,212,255,0.05);
+            background: rgba(58,123,213,0.04);
         }
 
         /* Main */
         main {
-            max-width: 880px;
+            max-width: 860px;
             margin: 0 auto;
-            padding: 40px 20px 60px;
+            padding: 35px 20px 60px;
         }
-        section { margin-bottom: 55px; }
+        section { margin-bottom: 50px; }
         .section-title {
-            font-size: 1.9rem;
+            font-size: 1.8rem;
             color: var(--primary);
-            margin-bottom: 25px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid rgba(0,212,255,0.2);
+            margin-bottom: 22px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(58,123,213,0.15);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
-        .section-title .icon { font-size: 1.6rem; }
+        .section-title .icon { font-size: 1.5rem; }
 
         /* Cards */
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 14px;
-            padding: 28px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(12px);
+            padding: 26px;
+            margin-bottom: 18px;
+            backdrop-filter: blur(14px);
             transition: all 0.3s;
         }
         .card:hover {
             background: var(--card-hover);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: var(--shadow);
-            border-color: rgba(0,212,255,0.3);
+            border-color: rgba(58,123,213,0.25);
         }
 
         /* About */
-        .about-text { font-size: 1rem; margin-bottom: 20px; line-height: 1.8; }
+        .about-text { font-size: 0.98rem; margin-bottom: 18px; line-height: 1.85; color: var(--text); }
         .about-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 12px;
         }
         .about-item {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 14px;
-            background: rgba(0,212,255,0.05);
+            padding: 13px;
+            background: rgba(58,123,213,0.04);
             border-radius: 10px;
-            border: 1px solid rgba(0,212,255,0.08);
+            border: 1px solid rgba(58,123,213,0.08);
         }
-        .about-item .icon { font-size: 1.4rem; }
-        .about-item .label { font-size: 0.8rem; color: var(--text-light); }
-        .about-item .value { font-weight: 600; font-size: 0.95rem; }
+        .about-item .icon { font-size: 1.3rem; }
+        .about-item .label { font-size: 0.78rem; color: var(--text-light); }
+        .about-item .value { font-weight: 600; font-size: 0.93rem; }
 
         /* Education Timeline */
         .timeline { position: relative; padding-left: 35px; }
@@ -281,10 +228,10 @@
             position: absolute;
             left: 12px; top: 0; bottom: 0;
             width: 3px;
-            background: linear-gradient(180deg, var(--primary), var(--accent), #f472b6);
+            background: linear-gradient(180deg, var(--primary), var(--accent));
             border-radius: 2px;
         }
-        .timeline-item { position: relative; margin-bottom: 25px; }
+        .timeline-item { position: relative; margin-bottom: 22px; }
         .timeline-item::before {
             content: '';
             position: absolute;
@@ -292,53 +239,54 @@
             width: 14px; height: 14px;
             background: var(--primary);
             border-radius: 50%;
-            border: 3px solid rgba(10,15,30,0.9);
-            box-shadow: 0 0 10px rgba(0,212,255,0.5);
+            border: 3px solid rgba(255,255,255,0.9);
+            box-shadow: 0 0 8px rgba(58,123,213,0.3);
         }
         .timeline-date {
-            font-size: 0.88rem;
+            font-size: 0.86rem;
             color: var(--primary);
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
-        .timeline-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 4px; }
-        .timeline-subtitle { color: var(--text-light); margin-bottom: 10px; font-size: 0.95rem; }
+        .timeline-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 3px; }
+        .timeline-subtitle { color: var(--text-light); margin-bottom: 8px; font-size: 0.93rem; }
+        .desc { color: var(--text-light); font-size: 0.93rem; line-height: 1.8; }
 
         /* Skills */
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 18px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
         }
         .skill-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 14px;
-            padding: 22px;
-            backdrop-filter: blur(12px);
+            padding: 20px;
+            backdrop-filter: blur(14px);
             transition: all 0.3s;
         }
         .skill-card:hover {
-            border-color: rgba(0,212,255,0.3);
+            border-color: rgba(58,123,213,0.25);
             transform: translateY(-2px);
         }
         .skill-card h3 {
-            font-size: 1.05rem;
-            margin-bottom: 16px;
+            font-size: 1.02rem;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .skill-bar { margin-bottom: 14px; }
+        .skill-bar { margin-bottom: 12px; }
         .skill-bar-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 6px;
-            font-size: 0.88rem;
+            margin-bottom: 5px;
+            font-size: 0.86rem;
         }
         .skill-bar-bg {
-            height: 8px;
-            background: rgba(255,255,255,0.08);
+            height: 7px;
+            background: rgba(58,123,213,0.1);
             border-radius: 4px;
             overflow: hidden;
         }
@@ -349,75 +297,90 @@
             transition: width 1.2s ease-out;
         }
         .skill-note {
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             color: var(--text-light);
-            margin-top: 6px;
+            margin-top: 5px;
         }
 
         /* Experience */
         .exp-card { border-left: 3px solid var(--primary); }
-        .exp-card h3 { font-size: 1.2rem; margin-bottom: 5px; }
-        .exp-card .role { color: var(--primary); font-weight: 600; margin-bottom: 10px; font-size: 0.95rem; }
-        .exp-card .desc { color: var(--text-light); font-size: 0.95rem; line-height: 1.8; }
+        .exp-card h3 { font-size: 1.15rem; margin-bottom: 4px; }
+        .exp-card .role { color: var(--primary); font-weight: 600; margin-bottom: 8px; font-size: 0.93rem; }
+        .exp-card .desc { color: var(--text-light); font-size: 0.93rem; line-height: 1.8; }
 
         /* Honors */
         .honors-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 12px;
         }
         .honor-item {
             display: flex;
             align-items: flex-start;
-            gap: 14px;
-            padding: 18px;
-            background: rgba(0,212,255,0.04);
+            gap: 12px;
+            padding: 16px;
+            background: rgba(58,123,213,0.03);
             border-radius: 12px;
-            border: 1px solid rgba(0,212,255,0.08);
+            border: 1px solid rgba(58,123,213,0.08);
             transition: all 0.3s;
         }
         .honor-item:hover {
-            background: rgba(0,212,255,0.08);
-            border-color: rgba(0,212,255,0.2);
+            background: rgba(58,123,213,0.06);
+            border-color: rgba(58,123,213,0.18);
         }
-        .honor-item .emoji { font-size: 1.8rem; }
-        .honor-item h4 { font-size: 1rem; margin-bottom: 4px; }
-        .honor-item p { font-size: 0.85rem; color: var(--text-light); }
+        .honor-item .emoji { font-size: 1.7rem; }
+        .honor-item h4 { font-size: 0.98rem; margin-bottom: 3px; }
+        .honor-item p { font-size: 0.83rem; color: var(--text-light); }
 
         /* Footer */
         footer {
             text-align: center;
-            padding: 30px 20px;
+            padding: 28px 20px;
             color: var(--text-light);
-            font-size: 0.88rem;
-            border-top: 1px solid rgba(0,212,255,0.1);
+            font-size: 0.86rem;
+            border-top: 1px solid rgba(58,123,213,0.1);
+            background: rgba(255,255,255,0.3);
+            backdrop-filter: blur(6px);
+        }
+
+        /* Mouse trail hint */
+        .mouse-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(8px);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            color: var(--text-light);
+            z-index: 50;
+            border: 1px solid rgba(58,123,213,0.1);
+            animation: fadeInUp 1s ease 2s both;
+            pointer-events: none;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
 
         /* Responsive */
         @media (max-width: 600px) {
-            header h1 { font-size: 2rem; }
+            header h1 { font-size: 1.9rem; }
             nav ul { justify-content: flex-start; overflow-x: auto; padding: 0 10px; }
-            nav ul li a { padding: 12px 16px; font-size: 0.88rem; white-space: nowrap; }
+            nav ul li a { padding: 12px 14px; font-size: 0.86rem; white-space: nowrap; }
             .contact-links { flex-direction: column; align-items: center; }
             .skills-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <canvas id="anime-bg"></canvas>
+    <!-- Background Image -->
+    <div class="bg-image"></div>
 
-    <!-- Theme Switcher -->
-    <button class="theme-toggle" id="themeBtn">🎨</button>
-    <div class="theme-panel" id="themePanel">
-        <h4>选择主题风格</h4>
-        <div class="theme-option active" data-theme="default">🌌 星空科技</div>
-        <div class="theme-option" data-theme="ocean">🌊 深海蓝</div>
-        <div class="theme-option" data-theme="sunset">🌅 落日晚霞</div>
-        <div class="theme-option" data-theme="forest">🌲 森林绿</div>
-        <div class="theme-option" data-theme="purple">💜 紫夜幻梦</div>
-        <div class="theme-option" data-theme="sakura">🌸 樱花粉</div>
-        <div class="theme-option" data-theme="light">☀️ 清新浅色</div>
-    </div>
+    <!-- Particle Canvas (floating leaves + mouse trail petals) -->
+    <canvas id="particle-canvas"></canvas>
 
     <div class="content-wrapper">
         <header>
@@ -480,9 +443,7 @@
                         <div class="timeline-date">2023.09 - 2026.06</div>
                         <h3 class="timeline-title">湖北科技职业学院</h3>
                         <p class="timeline-subtitle">云计算技术应用 / 专科</p>
-                        <p class="desc" style="color:var(--text-light);font-size:0.95rem;line-height:1.8;">
-                            主修课程：云计算导论、计算机网络技术、Linux 系统应用、Python 程序设计、数据库技术（MySQL）、虚拟化技术与应用、OpenStack 技术与应用、私有云基础架构与运维等。
-                        </p>
+                        <p class="desc">主修课程：云计算导论、计算机网络技术、Linux 系统应用、Python 程序设计、数据库技术（MySQL）、虚拟化技术与应用、OpenStack 技术与应用、私有云基础架构与运维等。</p>
                     </div>
                 </div>
             </section>
@@ -592,377 +553,215 @@
         </footer>
     </div>
 
+    <div class="mouse-hint">🌸 移动鼠标会有花瓣飘落哦~</div>
+
     <script>
-    // ==================== Theme Config ====================
-    const themeConfig = {
-        default: {
-            sky: ['#0a0a2e','#1a1a4e','#0d1b3e'],
-            clouds: 'rgba(100,150,255,0.12)', stars: true, moon: true, sakura: true, fireflies: false, sun: false, waves: false
-        },
-        ocean: {
-            sky: ['#001428','#002850','#001830'],
-            clouds: 'rgba(0,180,220,0.1)', stars: false, moon: false, sakura: false, fireflies: false, sun: false, waves: true
-        },
-        sunset: {
-            sky: ['#1a0a0a','#4a1a2a','#ff6b35'],
-            clouds: 'rgba(255,160,80,0.18)', stars: false, moon: false, sakura: false, fireflies: false, sun: true, waves: false
-        },
-        forest: {
-            sky: ['#0a1a0a','#1a3a1a','#0a2a1a'],
-            clouds: 'rgba(80,180,100,0.1)', stars: false, moon: false, sakura: false, fireflies: true, sun: false, waves: false
-        },
-        purple: {
-            sky: ['#0a0020','#1a0040','#2a0060'],
-            clouds: 'rgba(180,100,255,0.12)', stars: true, moon: true, sakura: true, fireflies: false, sun: false, waves: false
-        },
-        sakura: {
-            sky: ['#1a0a1a','#3a1a2a','#2a1020'],
-            clouds: 'rgba(255,180,200,0.14)', stars: true, moon: true, sakura: true, fireflies: false, sun: false, waves: false
-        },
-        light: {
-            sky: ['#5BA3D9','#87CEEB','#B0E0E6'],
-            clouds: 'rgba(255,255,255,0.5)', stars: false, moon: false, sakura: false, fireflies: false, sun: true, waves: false
-        }
-    };
-
-    let currentTheme = localStorage.getItem('theme') || 'default';
-    let currentScene = currentTheme;
-
-    // ==================== Anime Background Canvas ====================
-    const canvas = document.getElementById('anime-bg');
+    // ==================== Particle Canvas ====================
+    const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let W, H;
-
-    // Pre-computed data
-    let treeProfile = [];
-    let mountain1 = [], mountain2 = [], farMountain = [];
-    let clouds = [], petals = [], starList = [], fireflyList = [];
 
     function resize() {
         W = canvas.width = window.innerWidth;
         H = canvas.height = window.innerHeight;
     }
+    resize();
+    window.addEventListener('resize', resize);
 
-    function seedRandom(seed) {
-        let s = seed;
-        return function() {
-            s = (s * 9301 + 49297) % 233280;
-            return s / 233280;
-        };
-    }
+    // ---- Mouse tracking ----
+    let mouseX = -100, mouseY = -100;
+    let mouseActive = false;
+    let mouseTimer = null;
 
-    function precompute() {
-        const rng = seedRandom(42);
-        // Tree profile
-        treeProfile = [];
-        for (let x = 0; x < 4000; x += 6) {
-            const h = Math.sin(x * 0.05) * 12 + rng() * 18 + 18;
-            treeProfile.push({ x: x, h: h });
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        mouseActive = true;
+        // Spawn petals at mouse position
+        if (Math.random() < 0.35) {
+            spawnMousePetal(mouseX, mouseY);
         }
-        // Mountains (deterministic sine combos)
-        for (let x = 0; x <= 4000; x += 3) {
-            farMountain.push(Math.sin(x * 0.002) * 80 + Math.sin(x * 0.005) * 40 + Math.sin(x * 0.0008) * 100);
-            mountain1.push(Math.sin(x * 0.003) * 60 + Math.sin(x * 0.007) * 30 + Math.sin(x * 0.001) * 80);
-            mountain2.push(Math.sin(x * 0.005 + 1) * 40 + Math.sin(x * 0.01 + 2) * 20 + Math.sin(x * 0.002) * 50);
+        clearTimeout(mouseTimer);
+        mouseTimer = setTimeout(() => { mouseActive = false; }, 800);
+    });
+
+    document.addEventListener('click', (e) => {
+        // Burst of petals on click
+        for (let i = 0; i < 8; i++) {
+            spawnMousePetal(e.clientX, e.clientY, true);
         }
-    }
-    precompute();
+    });
 
-    function initScene() {
-        const cfg = themeConfig[currentScene] || themeConfig.default;
-        clouds = []; petals = []; starList = []; fireflyList = [];
+    // ---- Color palettes for petals/leaves ----
+    const petalColors = [
+        [255, 182, 193], // light pink
+        [255, 160, 180], // pink
+        [255, 200, 210], // soft pink
+        [255, 140, 160], // rose
+        [240, 200, 230], // lavender pink
+        [255, 220, 230], // pale pink
+    ];
+    const leafColors = [
+        [120, 190, 120],  // green
+        [140, 200, 100],  // yellow-green
+        [100, 170, 130],  // teal green
+        [180, 210, 140],  // light green
+        [200, 180, 120],  // golden
+    ];
 
-        // Clouds
-        for (let i = 0; i < 10; i++) {
-            clouds.push({
-                x: Math.random() * W * 1.5 - W * 0.25,
-                y: Math.random() * H * 0.4,
-                w: 100 + Math.random() * 220,
-                h: 25 + Math.random() * 40,
-                speed: 0.1 + Math.random() * 0.3,
-                opacity: 0.4 + Math.random() * 0.6
-            });
-        }
+    // ---- Floating particles (ambient) ----
+    let floatingParticles = [];
 
-        // Sakura petals
-        if (cfg.sakura) {
-            for (let i = 0; i < 40; i++) {
-                petals.push(newPetal());
-            }
-        }
-
-        // Stars
-        if (cfg.stars) {
-            for (let i = 0; i < 120; i++) {
-                starList.push({
-                    x: Math.random() * W,
-                    y: Math.random() * H * 0.55,
-                    r: Math.random() * 1.8 + 0.3,
-                    phase: Math.random() * Math.PI * 2,
-                    speed: 0.02 + Math.random() * 0.05
-                });
-            }
-        }
-
-        // Fireflies
-        if (cfg.fireflies) {
-            for (let i = 0; i < 50; i++) {
-                fireflyList.push({
-                    x: Math.random() * W,
-                    y: Math.random() * H,
-                    vx: (Math.random() - 0.5) * 0.8,
-                    vy: (Math.random() - 0.5) * 0.6,
-                    r: 1.5 + Math.random() * 2.5,
-                    phase: Math.random() * Math.PI * 2,
-                    speed: 0.01 + Math.random() * 0.03
-                });
-            }
-        }
-    }
-
-    function newPetal() {
-        const cfg = themeConfig[currentScene] || themeConfig.default;
-        const isPurple = currentScene === 'purple';
+    function createFloatingParticle() {
+        const isLeaf = Math.random() < 0.35;
+        const colors = isLeaf ? leafColors : petalColors;
+        const color = colors[Math.floor(Math.random() * colors.length)];
         return {
             x: Math.random() * W,
-            y: -20 - Math.random() * 120,
-            size: 3 + Math.random() * 6,
-            vx: (Math.random() - 0.3) * 1.2,
-            vy: 0.6 + Math.random() * 1.5,
+            y: -20 - Math.random() * H * 0.3,
+            size: isLeaf ? (4 + Math.random() * 5) : (3 + Math.random() * 5),
+            vx: (Math.random() - 0.5) * 0.8,
+            vy: 0.3 + Math.random() * 0.8,
             rot: Math.random() * Math.PI * 2,
-            rotV: (Math.random() - 0.5) * 0.04,
-            alpha: 0.35 + Math.random() * 0.55,
+            rotV: (Math.random() - 0.5) * 0.03,
+            alpha: 0.25 + Math.random() * 0.45,
             wobble: Math.random() * Math.PI * 2,
-            color: isPurple ? [200, 150, 255] : (currentScene === 'light' ? [255, 200, 220] : [255, 180, 200])
+            wobbleSpeed: 0.008 + Math.random() * 0.015,
+            wobbleAmp: 0.3 + Math.random() * 0.6,
+            isLeaf: isLeaf,
+            color: color
         };
     }
 
-    function drawSky(colors) {
-        const g = ctx.createLinearGradient(0, 0, 0, H);
-        g.addColorStop(0, colors[0]);
-        g.addColorStop(0.5, colors[1]);
-        g.addColorStop(1, colors[2]);
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, W, H);
+    // Initialize floating particles
+    for (let i = 0; i < 25; i++) {
+        const p = createFloatingParticle();
+        p.y = Math.random() * H; // spread across screen initially
+        floatingParticles.push(p);
     }
 
-    function drawMoon(time) {
-        const mx = W * 0.82, my = H * 0.12, mr = 32;
-        // Glow
-        const glow = ctx.createRadialGradient(mx, my, mr * 0.3, mx, my, mr * 3.5);
-        glow.addColorStop(0, 'rgba(200,220,255,0.2)');
-        glow.addColorStop(1, 'rgba(200,220,255,0)');
-        ctx.fillStyle = glow;
-        ctx.beginPath(); ctx.arc(mx, my, mr * 3.5, 0, Math.PI * 2); ctx.fill();
-        // Body
-        ctx.fillStyle = 'rgba(240,245,255,0.92)';
-        ctx.beginPath(); ctx.arc(mx, my, mr, 0, Math.PI * 2); ctx.fill();
-        // Shadow
-        ctx.fillStyle = 'rgba(10,15,40,0.55)';
-        ctx.beginPath(); ctx.arc(mx + 10, my - 5, mr * 0.85, 0, Math.PI * 2); ctx.fill();
-    }
+    // ---- Mouse trail petals ----
+    let mousePetals = [];
 
-    function drawSun(time) {
-        const sx = W * 0.85, sy = H * 0.18, sr = 40;
-        const pulse = Math.sin(time * 0.001) * 3;
-        const glow = ctx.createRadialGradient(sx, sy, sr * 0.2, sx, sy, (sr + pulse) * 4);
-        glow.addColorStop(0, 'rgba(255,220,120,0.3)');
-        glow.addColorStop(0.3, 'rgba(255,180,80,0.1)');
-        glow.addColorStop(1, 'rgba(255,100,30,0)');
-        ctx.fillStyle = glow;
-        ctx.beginPath(); ctx.arc(sx, sy, (sr + pulse) * 4, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = 'rgba(255,230,140,0.95)';
-        ctx.beginPath(); ctx.arc(sx, sy, sr + pulse, 0, Math.PI * 2); ctx.fill();
-    }
-
-    function drawStarLayer(time) {
-        starList.forEach(s => {
-            const a = 0.3 + Math.sin(s.phase + time * s.speed) * 0.6;
-            ctx.fillStyle = `rgba(255,255,255,${Math.max(0, a)})`;
-            ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
-            if (s.r > 1.2 && a > 0.5) {
-                ctx.strokeStyle = `rgba(255,255,255,${a * 0.3})`;
-                ctx.lineWidth = 0.5;
-                ctx.beginPath(); ctx.moveTo(s.x - 5, s.y); ctx.lineTo(s.x + 5, s.y); ctx.stroke();
-                ctx.beginPath(); ctx.moveTo(s.x, s.y - 5); ctx.lineTo(s.x, s.y + 5); ctx.stroke();
-            }
+    function spawnMousePetal(x, y, burst = false) {
+        const isLeaf = Math.random() < 0.25;
+        const colors = isLeaf ? leafColors : petalColors;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const angle = Math.random() * Math.PI * 2;
+        const speed = burst ? (1.5 + Math.random() * 3) : (0.5 + Math.random() * 1.5);
+        mousePetals.push({
+            x: x + (Math.random() - 0.5) * 20,
+            y: y + (Math.random() - 0.5) * 20,
+            size: isLeaf ? (3 + Math.random() * 4) : (2.5 + Math.random() * 4.5),
+            vx: Math.cos(angle) * speed * (burst ? 1.2 : 0.6),
+            vy: Math.sin(angle) * speed * (burst ? 0.8 : 0.4) + (burst ? -1 : 0.2),
+            rot: Math.random() * Math.PI * 2,
+            rotV: (Math.random() - 0.5) * 0.06,
+            alpha: 0.5 + Math.random() * 0.5,
+            life: 1.0,
+            decay: burst ? (0.008 + Math.random() * 0.01) : (0.005 + Math.random() * 0.008),
+            wobble: Math.random() * Math.PI * 2,
+            wobbleSpeed: 0.02 + Math.random() * 0.03,
+            wobbleAmp: 0.4 + Math.random() * 0.8,
+            gravity: burst ? 0.03 : 0.015,
+            isLeaf: isLeaf,
+            color: color
         });
     }
 
-    function drawCloudLayer(time) {
-        const cfg = themeConfig[currentScene] || themeConfig.default;
-        clouds.forEach(c => {
-            c.x += c.speed;
-            if (c.x > W + c.w) c.x = -c.w * 2;
-            ctx.fillStyle = cfg.clouds;
-            ctx.globalAlpha = c.opacity;
+    // ---- Drawing helpers ----
+    function drawPetalShape(x, y, size, rot, color, alpha, isLeaf) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rot);
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},0.85)`;
+
+        if (isLeaf) {
+            // Leaf shape
             ctx.beginPath();
-            ctx.ellipse(c.x, c.y, c.w * 0.5, c.h * 0.5, 0, 0, Math.PI * 2);
+            ctx.moveTo(0, -size * 1.2);
+            ctx.bezierCurveTo(size * 0.6, -size * 0.6, size * 0.5, size * 0.6, 0, size * 1.2);
+            ctx.bezierCurveTo(-size * 0.5, size * 0.6, -size * 0.6, -size * 0.6, 0, -size * 1.2);
             ctx.fill();
+            // Leaf vein
+            ctx.strokeStyle = `rgba(${Math.max(0,color[0]-30)},${Math.max(0,color[1]-30)},${Math.max(0,color[2]-30)},${alpha * 0.5})`;
+            ctx.lineWidth = 0.5;
             ctx.beginPath();
-            ctx.ellipse(c.x - c.w * 0.25, c.y + c.h * 0.12, c.w * 0.35, c.h * 0.4, 0, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.moveTo(0, -size * 1);
+            ctx.lineTo(0, size * 1);
+            ctx.stroke();
+        } else {
+            // Petal shape
             ctx.beginPath();
-            ctx.ellipse(c.x + c.w * 0.28, c.y + c.h * 0.06, c.w * 0.32, c.h * 0.38, 0, 0, Math.PI * 2);
+            ctx.moveTo(0, -size);
+            ctx.bezierCurveTo(size * 0.7, -size * 0.35, size * 0.7, size * 0.35, 0, size);
+            ctx.bezierCurveTo(-size * 0.7, size * 0.35, -size * 0.7, -size * 0.35, 0, -size);
             ctx.fill();
-            ctx.globalAlpha = 1;
-        });
+        }
+
+        ctx.globalAlpha = 1;
+        ctx.restore();
     }
 
-    function drawMountains(baseY, time) {
-        const isLight = currentScene === 'light';
-        // Far mountain
-        ctx.fillStyle = isLight ? 'rgba(80,130,170,0.3)' : 'rgba(20,30,50,0.5)';
-        ctx.beginPath(); ctx.moveTo(0, baseY);
-        for (let i = 0; i < farMountain.length && i * 3 <= W; i++) {
-            ctx.lineTo(i * 3, baseY - 160 - farMountain[i]);
-        }
-        ctx.lineTo(W, baseY); ctx.closePath(); ctx.fill();
-        // Mountain 1
-        ctx.fillStyle = isLight ? 'rgba(60,120,80,0.4)' : 'rgba(15,25,20,0.7)';
-        ctx.beginPath(); ctx.moveTo(0, baseY);
-        for (let i = 0; i < mountain1.length && i * 3 <= W; i++) {
-            ctx.lineTo(i * 3, baseY - 110 - mountain1[i]);
-        }
-        ctx.lineTo(W, baseY); ctx.closePath(); ctx.fill();
-        // Mountain 2
-        ctx.fillStyle = isLight ? 'rgba(40,100,60,0.5)' : 'rgba(10,20,12,0.85)';
-        ctx.beginPath(); ctx.moveTo(0, baseY);
-        for (let i = 0; i < mountain2.length && i * 3 <= W; i++) {
-            ctx.lineTo(i * 3, baseY - 55 - mountain2[i]);
-        }
-        ctx.lineTo(W, baseY); ctx.closePath(); ctx.fill();
-        // Trees
-        ctx.fillStyle = isLight ? 'rgba(30,75,40,0.65)' : 'rgba(5,15,5,0.95)';
-        ctx.beginPath(); ctx.moveTo(0, baseY);
-        const scale = W / 4000;
-        treeProfile.forEach(t => {
-            const px = t.x * scale;
-            if (px <= W) {
-                ctx.lineTo(px, baseY - t.h);
-                ctx.lineTo(px + 3 * scale, baseY - 4);
-            }
-        });
-        ctx.lineTo(W, baseY); ctx.closePath(); ctx.fill();
-    }
+    // ---- Animation loop ----
+    function animate() {
+        ctx.clearRect(0, 0, W, H);
 
-    function drawPetalLayer(time) {
-        petals.forEach(p => {
-            p.wobble += 0.018;
-            p.x += p.vx + Math.sin(p.wobble) * 0.9;
+        // Update & draw floating particles
+        for (let i = 0; i < floatingParticles.length; i++) {
+            const p = floatingParticles[i];
+            p.wobble += p.wobbleSpeed;
+            p.x += p.vx + Math.sin(p.wobble) * p.wobbleAmp;
             p.y += p.vy;
             p.rot += p.rotV;
+
+            // Mouse influence on nearby floating particles
+            if (mouseActive) {
+                const dx = p.x - mouseX;
+                const dy = p.y - mouseY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 150) {
+                    const force = (150 - dist) / 150 * 0.8;
+                    p.vx += (dx / dist) * force;
+                    p.vy += (dy / dist) * force * 0.5;
+                }
+            }
+
+            // Dampen velocity
+            p.vx *= 0.995;
+            p.vy = p.vy * 0.995 + 0.002; // gentle gravity
+
+            // Reset if out of bounds
             if (p.y > H + 30 || p.x < -60 || p.x > W + 60) {
-                Object.assign(p, newPetal());
-                p.y = -20;
+                Object.assign(p, createFloatingParticle());
             }
-            ctx.save();
-            ctx.translate(p.x, p.y);
-            ctx.rotate(p.rot);
-            ctx.globalAlpha = p.alpha;
-            ctx.fillStyle = `rgba(${p.color[0]},${p.color[1]},${p.color[2]},0.85)`;
-            ctx.beginPath();
-            ctx.moveTo(0, -p.size);
-            ctx.bezierCurveTo(p.size * 0.8, -p.size * 0.4, p.size * 0.8, p.size * 0.4, 0, p.size);
-            ctx.bezierCurveTo(-p.size * 0.8, p.size * 0.4, -p.size * 0.8, -p.size * 0.4, 0, -p.size);
-            ctx.fill();
-            ctx.globalAlpha = 1;
-            ctx.restore();
-        });
-    }
 
-    function drawFireflyLayer(time) {
-        fireflyList.forEach(f => {
-            f.x += f.vx + Math.sin(f.phase) * 0.3;
-            f.y += f.vy + Math.cos(f.phase) * 0.2;
-            f.phase += f.speed;
-            if (f.x < 0) f.x = W; if (f.x > W) f.x = 0;
-            if (f.y < 0) f.y = H; if (f.y > H) f.y = 0;
-            const a = 0.3 + Math.sin(f.phase * 3) * 0.6;
-            const glow = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.r * 7);
-            glow.addColorStop(0, `rgba(160,255,100,${a * 0.5})`);
-            glow.addColorStop(1, 'rgba(160,255,100,0)');
-            ctx.fillStyle = glow;
-            ctx.beginPath(); ctx.arc(f.x, f.y, f.r * 7, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = `rgba(210,255,150,${a})`;
-            ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2); ctx.fill();
-        });
-    }
+            drawPetalShape(p.x, p.y, p.size, p.rot, p.color, p.alpha, p.isLeaf);
+        }
 
-    function drawWaves(time) {
-        const t = time * 0.001;
-        ctx.strokeStyle = 'rgba(100,200,255,0.18)';
-        ctx.lineWidth = 1.5;
-        for (let i = 0; i < 6; i++) {
-            ctx.beginPath();
-            for (let x = 0; x < W; x += 3) {
-                const y = H * 0.83 + i * 10 + Math.sin(x * 0.008 + t + i * 1.2) * 5;
-                x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        // Update & draw mouse petals
+        for (let i = mousePetals.length - 1; i >= 0; i--) {
+            const p = mousePetals[i];
+            p.wobble += p.wobbleSpeed;
+            p.x += p.vx + Math.sin(p.wobble) * p.wobbleAmp;
+            p.y += p.vy;
+            p.vy += p.gravity;
+            p.vx *= 0.99;
+            p.rot += p.rotV;
+            p.life -= p.decay;
+
+            if (p.life <= 0) {
+                mousePetals.splice(i, 1);
+                continue;
             }
-            ctx.stroke();
+
+            drawPetalShape(p.x, p.y, p.size, p.rot, p.color, p.alpha * p.life, p.isLeaf);
         }
+
+        requestAnimationFrame(animate);
     }
-
-    function drawFrame(time) {
-        const cfg = themeConfig[currentScene] || themeConfig.default;
-        drawSky(cfg.sky);
-        if (cfg.moon) drawMoon(time);
-        if (cfg.sun) drawSun(time);
-        if (cfg.stars) drawStarLayer(time);
-        drawCloudLayer(time);
-        const baseY = H * 0.78;
-        drawMountains(baseY, time);
-        // Ground
-        const isLight = currentScene === 'light';
-        ctx.fillStyle = isLight ? 'rgba(50,120,60,0.7)' : 'rgba(5,12,5,0.95)';
-        ctx.fillRect(0, baseY + 2, W, H - baseY);
-        // Grass
-        ctx.strokeStyle = isLight ? 'rgba(80,160,80,0.4)' : 'rgba(30,60,30,0.5)';
-        ctx.lineWidth = 1;
-        for (let x = 0; x < W; x += 7) {
-            const gh = 6 + Math.sin(x * 0.1 + time * 0.0015) * 4;
-            ctx.beginPath(); ctx.moveTo(x, baseY + 2); ctx.lineTo(x + 2, baseY + 2 - gh); ctx.stroke();
-        }
-        if (cfg.sakura) drawPetalLayer(time);
-        if (cfg.fireflies) drawFireflyLayer(time);
-        if (cfg.waves) {
-            ctx.fillStyle = 'rgba(0,30,60,0.5)';
-            ctx.fillRect(0, baseY + 2, W, H - baseY);
-            drawWaves(time);
-        }
-        requestAnimationFrame(drawFrame);
-    }
-
-    // ==================== Theme Switcher ====================
-    const themeBtn = document.getElementById('themeBtn');
-    const themePanel = document.getElementById('themePanel');
-
-    themeBtn.addEventListener('click', () => themePanel.classList.toggle('show'));
-
-    document.querySelectorAll('.theme-option').forEach(opt => {
-        opt.addEventListener('click', () => {
-            const theme = opt.dataset.theme;
-            currentTheme = theme;
-            currentScene = theme;
-            localStorage.setItem('theme', theme);
-            initScene();
-            document.querySelectorAll('.theme-option').forEach(o => o.classList.remove('active'));
-            opt.classList.add('active');
-            themePanel.classList.remove('show');
-        });
-    });
-
-    // Set initial theme selection
-    document.querySelectorAll('.theme-option').forEach(opt => {
-        opt.classList.toggle('active', opt.dataset.theme === currentTheme);
-    });
-
-    // Close panel on outside click
-    document.addEventListener('click', (e) => {
-        if (!themeBtn.contains(e.target) && !themePanel.contains(e.target)) {
-            themePanel.classList.remove('show');
-        }
-    });
+    animate();
 
     // ==================== Daily Quotes ====================
     const happyQuotes = [
@@ -992,13 +791,11 @@
         '今天也要开心哦！',
         '生活就像骑自行车，想保持平衡就得往前走。'
     ];
-    let lastQuote = -1;
     function showDailyQuote() {
-        let idx;
-        do { idx = Math.floor(Math.random() * happyQuotes.length); } while (idx === lastQuote);
-        lastQuote = idx;
+        const idx = Math.floor(Math.random() * happyQuotes.length);
         document.getElementById('quoteText').textContent = happyQuotes[idx];
     }
+    showDailyQuote();
 
     // ==================== Navigation ====================
     const sections = document.querySelectorAll('section');
@@ -1014,13 +811,6 @@
             if (link.getAttribute('href') === '#' + current) link.classList.add('active');
         });
     });
-
-    // ==================== Init ====================
-    resize();
-    initScene();
-    requestAnimationFrame(drawFrame);
-    showDailyQuote();
-    window.addEventListener('resize', () => { resize(); initScene(); });
     </script>
 </body>
 </html>
