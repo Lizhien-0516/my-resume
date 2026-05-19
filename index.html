@@ -80,6 +80,11 @@
             opacity: 0;
             transform: scale(0.9);
         }
+        .intro-title.morphed {
+            opacity: 1;
+            transform: scale(1);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
         .intro-hint {
             font-size: 1.1rem;
             color: rgba(255,255,255,0.8);
@@ -594,21 +599,44 @@
         const hint = document.getElementById('introHint');
         const screen = this;
 
-        // Step 1: Morph "Resume" → "简历"
+        // Step 1: Fade out hint text
         hint.style.transition = 'opacity 0.3s';
         hint.style.opacity = '0';
-        title.classList.add('morphing');
 
+        // Step 2: Morph "Resume" → "简历" with scale effect
+        title.classList.add('morphing');
         setTimeout(() => {
             title.textContent = '简历';
             title.classList.remove('morphing');
-        }, 400);
+            title.classList.add('morphed');
 
-        // Step 2: After morph, fade out the intro screen
-        setTimeout(() => {
-            screen.classList.add('hiding');
-            setTimeout(() => { screen.classList.add('hidden'); }, 800);
-        }, 1200);
+            // Step 3: After "简历" appears, move it to avatar position
+            setTimeout(() => {
+                const avatar = document.querySelector('.avatar');
+                const titleRect = title.getBoundingClientRect();
+                const avatarRect = avatar.getBoundingClientRect();
+
+                const dx = avatarRect.left + avatarRect.width / 2 - (titleRect.left + titleRect.width / 2);
+                const dy = avatarRect.top + avatarRect.height / 2 - (titleRect.top + titleRect.height / 2);
+
+                title.style.transition = 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
+                title.style.transform = 'scale(0.58) translate(' + dx + 'px, ' + dy + 'px)';
+                title.style.opacity = '0.3';
+
+                // Step 4: Fade out intro screen while "简历" lands on avatar
+                setTimeout(() => {
+                    screen.classList.add('hiding');
+                    setTimeout(() => {
+                        screen.classList.add('hidden');
+                        // Reset title for potential replay
+                        title.style.transition = '';
+                        title.style.transform = '';
+                        title.style.opacity = '';
+                        title.classList.remove('morphed');
+                    }, 800);
+                }, 500);
+            }, 600);
+        }, 400);
     });
 
     // ==================== Particle Canvas ====================
